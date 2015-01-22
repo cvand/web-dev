@@ -7,16 +7,16 @@ body {
 }
 
 .calculator_wrapper {
-  margin: 20px auto auto;
-  padding: 10px;
-  width: 440px;
+	margin: 20px auto auto;
+	padding: 10px;
+	width: 440px;
 }
 
 .calculator {
-  background: none repeat scroll 0 0 #808080;
-  border-radius: 0.3em;
-  padding: 60px 10px 30px;
-  text-align: right;
+	background: none repeat scroll 0 0 #808080;
+	border-radius: 0.3em;
+	padding: 60px 10px 30px;
+	text-align: right;
 }
 
 .screen_wrapper {
@@ -24,13 +24,13 @@ body {
 }
 
 .screen {
-  background: none repeat scroll 0 0 #b0b0b0;
-  border: medium solid #a0a0a0;
-  padding: 10px;
+	background: none repeat scroll 0 0 #b0b0b0;
+	border: medium solid #a0a0a0;
+	padding: 10px;
 }
 
 .screen span {
-  vertical-align: bottom;
+	vertical-align: bottom;
 }
 
 .btn_wrapper {
@@ -42,10 +42,10 @@ body {
 }
 
 .btns span {
-  font-size: 20px;
+	font-size: 20px;
 }
 
-.btns > button {
+.btns>button {
 	background: none repeat scroll 0 0 #54898b;
 	border: medium outset cadetblue;
 	border-radius: 15px;
@@ -53,8 +53,8 @@ body {
 	width: 6em;
 }
 
-.btns > button:hover {
-  background: none repeat scroll 0 0 #74a9aa;
+.btns>button:hover {
+	background: none repeat scroll 0 0 #74a9aa;
 }
 
 .btns .operator {
