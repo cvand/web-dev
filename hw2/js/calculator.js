@@ -16,22 +16,40 @@ function buttonClicked(element) {
 		else {
 			last_screen = last_screen + span;
 		}
-		var screen = document.getElementById("screen-label");
-		screen.innerHTML = last_screen;
+		showInScreen(last_screen);
 	} else {
 		operation = true;
-		last_operation = id;
+		var operand = parseInt(last_screen);
 		
-		if (id == 'plus-op') {
-		} else if (id == 'minus-op') {
+		if (last_operation == 'plus-op') {
+			last_result = last_result + operand;
+		} else if (last_operation == 'minus-op') {
+			last_result = last_result - operand;
+		} else if (last_operation == 'multiply-op') {
+			last_result = last_result * operand;
+		} else if (last_operation == 'divide-op') {
+			last_result = Math.floor(last_result / operand);
+		} else {
+			last_result = operand;
+		}
+		
+		if (last_result > 1000000) {
+			last_result = 0;
+		}
+		
+		showInScreen(last_result);
+		last_operation = id;
 
-		} else if (id == 'multiply-op') {
-
-		} else if (id == 'divide-op') {
-
-		} else { // equals operation
-
+		if (id == 'equals-op') {
+			last_result = 0;
+			last_operation = '';
 		}
 	}
 	return true;
+}
+
+function showInScreen(result) {
+	var screen = document.getElementById("screen-label");
+	screen.innerHTML = result;
+	last_screen = result;
 }
