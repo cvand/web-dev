@@ -28,28 +28,35 @@ function buttonClicked(element) {
 		} else if (last_operation == 'multiply-op') {
 			last_result = last_result * operand;
 		} else if (last_operation == 'divide-op') {
-			last_result = Math.floor(last_result / operand);
+			if ( operand == 0 ) {
+				reset();
+				showInScreen('Error');
+				last_screen = '0';
+				return true;
+			} else {
+				last_result = Math.floor(last_result / operand);
+			}
 		} else {
 			last_result = operand;
 		}
 		
-		if (last_result > 1000000) {
-			last_result = 0;
-		}
-		
 		showInScreen(last_result);
+		last_screen = last_result;
 		last_operation = id;
 
 		if (id == 'equals-op') {
-			last_result = 0;
-			last_operation = '';
+			reset();
 		}
 	}
 	return true;
 }
 
+function reset() {
+	last_result = 0;
+	last_operation = '';
+}
+
 function showInScreen(result) {
 	var screen = document.getElementById("screen-label");
 	screen.innerHTML = result;
-	last_screen = result;
 }
