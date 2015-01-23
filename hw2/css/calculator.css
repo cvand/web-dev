@@ -9,7 +9,7 @@ body {
 .calculator_wrapper {
 	margin: 20px auto auto;
 	padding: 10px;
-	width: 440px;
+	width: -moz-fit-content;
 }
 
 .calculator {
@@ -45,7 +45,7 @@ body {
 	font-size: 20px;
 }
 
-.btns>button {
+.row>button {
 	background: none repeat scroll 0 0 #54898b;
 	border: medium outset cadetblue;
 	border-radius: 15px;

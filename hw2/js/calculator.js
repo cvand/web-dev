@@ -3,6 +3,16 @@ var last_screen = '0';
 var last_result = 0;
 var operation = false;
 
+function prepareListeners() {
+	var elements = document.getElementsByTagName('button');
+
+	for (var i = 0; i < elements.length; i++) {
+		elements[i].addEventListener("click", function() {
+			buttonClicked(this);
+		});
+	}
+}
+
 function buttonClicked(element) {
 	var id = element.getAttribute('id');
 	if (id == null) {
@@ -12,15 +22,14 @@ function buttonClicked(element) {
 		if ((last_screen == '0') || operation == true) {
 			last_screen = number;
 			operation = false;
-		}
-		else {
+		} else {
 			last_screen = last_screen + span;
 		}
 		showInScreen(last_screen);
 	} else {
 		operation = true;
 		var operand = parseInt(last_screen);
-		
+
 		if (last_operation == 'plus-op') {
 			last_result = last_result + operand;
 		} else if (last_operation == 'minus-op') {
@@ -28,7 +37,7 @@ function buttonClicked(element) {
 		} else if (last_operation == 'multiply-op') {
 			last_result = last_result * operand;
 		} else if (last_operation == 'divide-op') {
-			if ( operand == 0 ) {
+			if (operand == 0) {
 				reset();
 				showInScreen('Error');
 				last_screen = '0';
@@ -39,7 +48,7 @@ function buttonClicked(element) {
 		} else {
 			last_result = operand;
 		}
-		
+
 		showInScreen(last_result);
 		last_screen = last_result;
 		last_operation = id;
