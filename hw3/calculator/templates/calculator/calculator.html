@@ -8,18 +8,18 @@
 <script src="{{ STATIC_URL }}calculator/js/calculator.js"></script>
 </head>
 
-<body onload="prepareListeners()">
+<body>
 
 	<div class="calculator_wrapper">
 		<div class="calculator">
-			<form method="post" action="/calculator">
+			<form method="post" action="/calculator">{% csrf_token %}
 				<input type="hidden" name="last_operation" value="{{ last_operation }}">
 				<input type="hidden" name="last_result" value="{{ last_result }}">
 				<input type="hidden" name="operation" value="{{ operation }}">
 				
 				<div class="screen_wrapper">
 					<div class="screen">
-						<input id="screen-label" name="screen-label" type="text" value="{{ last_screen }}" readonly>
+						<input id="screen-label" name="last_screen" type="text" value="{{ last_screen }}" readonly>
 					</div>
 				</div>
 				<div class="btn_wrapper">
@@ -40,12 +40,12 @@
 							<button name="button" type="submit" value="1"><span>1</span></button>
 							<button name="button" type="submit" value="2"><span>2</span></button>
 							<button name="button" type="submit" value="3"><span>3</span></button>
-							<button name="button" id="multiply-op" type="submit" value="mutliply-op" class="operator"><span>&times;</span></button>
+							<button name="button" id="multiply-op" type="submit" value="multiply-op" class="operator"><span>&times;</span></button>
 						</div>
 						<div class="row">
-							<button name="button" type="button" value="0"><span>0</span></button>
-							<button name="button" id="equals-op" type="button" value="equals-op" class="operator"><span>&equals;</span></button>
-							<button name="button" id="divide-op" type="button" value="divide-op" class="operator"><span>&divide;</span></button>
+							<button name="button" type="submit" value="0"><span>0</span></button>
+							<button name="button" id="equals-op" type="submit" value="equals-op" class="operator"><span>&equals;</span></button>
+							<button name="button" id="divide-op" type="submit" value="divide-op" class="operator"><span>&divide;</span></button>
 						</div>
 					</div>
 				</div>

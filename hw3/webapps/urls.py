@@ -8,4 +8,6 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'calculator.views.index'),
+    
+    url(r'^calculator', 'calculator.views.calculate'),
 )
