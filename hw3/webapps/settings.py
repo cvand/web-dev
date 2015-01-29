@@ -1,5 +1,5 @@
 """
-Django settings for webdev_hw3 project.
+Django settings for webapps project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'h_4kb#hi719!6g8u^ue+qjud^2@1%v!6(*w41$#s1e!q5t3)%='
+SECRET_KEY = 'k(%b5)x%-%ggo)3ce!5akci)uqckg-p1re=nn7e0*p=bxz-38d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'calculator',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -48,9 +49,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'webdev_hw3.urls'
+ROOT_URLCONF = 'webapps.urls'
 
-WSGI_APPLICATION = 'webdev_hw3.wsgi.application'
+WSGI_APPLICATION = 'webapps.wsgi.application'
 
 
 # Database
