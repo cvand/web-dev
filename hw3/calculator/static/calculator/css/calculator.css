@@ -10,6 +10,7 @@ body {
 	margin: 20px auto auto;
 	padding: 10px;
 	width: -moz-fit-content;
+	max-width: 500px;
 }
 
 .calculator {
@@ -29,8 +30,12 @@ body {
 	padding: 10px;
 }
 
-.screen span {
-	vertical-align: bottom;
+#screen-label {
+	background: none repeat scroll 0 0 transparent;
+	border: medium none;
+	font-size: 1.3em;
+	max-width: 400px;
+	text-align: right;
 }
 
 .btn_wrapper {

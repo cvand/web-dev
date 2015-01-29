@@ -12,38 +12,44 @@
 
 	<div class="calculator_wrapper">
 		<div class="calculator">
-			<div class="screen_wrapper">
-				<div class="screen">
-					<span id="screen-label">0</span>
-				</div>
-			</div>
-			<div class="btn_wrapper">
-				<div class="btns">
-					<div class="row">
-						<button type="button"><span>7</span></button>
-						<button type="button"><span>8</span></button>
-						<button type="button"><span>9</span></button>
-						<button id="plus-op" type="button" class="operator"><span>&plus;</span></button>
-					</div>
-					<div class="row">
-						<button type="button"><span>4</span></button>
-						<button type="button"><span>5</span></button>
-						<button type="button"><span>6</span></button>
-						<button id="minus-op" type="button" class="operator"><span>&minus;</span></button>
-					</div>
-					<div class="row">
-						<button type="button"><span>1</span></button>
-						<button type="button"><span>2</span></button>
-						<button type="button"><span>3</span></button>
-						<button id="multiply-op" type="button" class="operator"><span>&times;</span></button>
-					</div>
-					<div class="row">
-						<button type="button"><span>0</span></button>
-						<button id="equals-op" type="button" class="operator"><span>&equals;</span></button>
-						<button id="divide-op" type="button" class="operator"><span>&divide;</span></button>
+			<form method="post" action="/calculator">
+				<input type="hidden" name="last_operation" value="{{ last_operation }}">
+				<input type="hidden" name="last_result" value="{{ last_result }}">
+				<input type="hidden" name="operation" value="{{ operation }}">
+				
+				<div class="screen_wrapper">
+					<div class="screen">
+						<input id="screen-label" name="screen-label" type="text" value="{{ last_screen }}" readonly>
 					</div>
 				</div>
-			</div>
+				<div class="btn_wrapper">
+					<div class="btns">
+						<div class="row">
+							<button name="button" type="submit" value="7"><span>7</span></button>
+							<button name="button" type="submit" value="8"><span>8</span></button>
+							<button name="button" type="submit" value="9"><span>9</span></button>
+							<button name="button" id="plus-op" type="submit" value="plus-op" class="operator"><span>&plus;</span></button>
+						</div>
+						<div class="row">
+							<button name="button" type="submit" value="4"><span>4</span></button>
+							<button name="button" type="submit" value="5"><span>5</span></button>
+							<button name="button" type="submit" value="6"><span>6</span></button>
+							<button name="button" id="minus-op" type="submit" value="minus-op" class="operator"><span>&minus;</span></button>
+						</div>
+						<div class="row">
+							<button name="button" type="submit" value="1"><span>1</span></button>
+							<button name="button" type="submit" value="2"><span>2</span></button>
+							<button name="button" type="submit" value="3"><span>3</span></button>
+							<button name="button" id="multiply-op" type="submit" value="mutliply-op" class="operator"><span>&times;</span></button>
+						</div>
+						<div class="row">
+							<button name="button" type="button" value="0"><span>0</span></button>
+							<button name="button" id="equals-op" type="button" value="equals-op" class="operator"><span>&equals;</span></button>
+							<button name="button" id="divide-op" type="button" value="divide-op" class="operator"><span>&divide;</span></button>
+						</div>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 
