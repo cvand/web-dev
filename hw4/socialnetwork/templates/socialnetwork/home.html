@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>A Social Network</title>
+</head>
+
+<body>
+	{% for error in errors %}
+	<p style="color: red">{{error}}</p>
+	{% endfor %}
+
+	<p>Your Posts:
+	<ol>
+		{% for post in posts %}
+		<li><a href="/socialnetwork/delete-post/{{post.id}}">X</a>
+			{{post}} {% endfor %}
+	</ol>
+	</p>
+
+	<form action="/socialnetwork/add-post" method="post">
+		Post Content: <input type="text" name="postcontent"> 
+		<input type="submit" value="Post"> {% csrf_token %}
+	</form>
+	<p>
+		<a href="/socialnetwork/logout">Logout</a>
+	</p>
+
+</body>
+</html>
+
