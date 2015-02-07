@@ -1,40 +1,55 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Social Network -- Register</title>
+<meta charset="utf-8">
+<title>Social Network -- Register</title>
+
+<link rel="stylesheet" href="{{ STATIC_URL }}socialnetwork/css/main.css" />
+<link rel="stylesheet"
+	href="{{ STATIC_URL }}socialnetwork/css/forms.css" />
+<script src="{{ STATIC_URL }}socialnetwork/js/socialnetwork.js"></script>
 </head>
 
 <body>
-    {% for error in errors %}
-        <p style="color: red">
-            {{ error }}
-        </p>
-    {% endfor %}
+	<div class="header">
+		<span class="sonet">SoNet</span>
+	</div>
+	<div align="center" class="body">
+		<div class="heading-wrapper">
+			<span class="heading">Please sign up below</span>
+		</div>
 
-    <p>
-        Register for the social network:
-    </p>
+		{% if form.errors %}
+		<div align="center" class="error-wrapper">
+			<span class="error">{{ error }}</span>
+		</div>
+		{% endif %}
 
-    <form method="post" action="/socialnetwork/register">
-        <table>
-        <tr>
-            <td>Username:</td>
-            <td><input type="text" name="username" value="{{username}}"></td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td><input type="password" name="password1"></td>
-        </tr>
-        <tr>
-            <td>Confirm password:</td>
-            <td><input type="password" name="password2"></td>
-        </tr>
-        </table>
+		<div class="register">
 
-        <input type="submit" value="Register" />
-        {% csrf_token %}
-    </form>
+			<form method="post" action="/socialnetwork/register">
+				<div class="form">
+					<table>
+						<tr>
+							<td><label>Username:</label></td>
+							<td><input type="text" name="username" value="{{username}}"></td>
+						</tr>
+						<tr>
+							<td><label>Password:</label></td>
+							<td><input type="password" name="password1"></td>
+						</tr>
+						<tr>
+							<td><label>Confirm password:</label></td>
+							<td><input type="password" name="password2"></td>
+						</tr>
+					</table>
+
+					<input class="submit" type="submit" value="Register" />
+				</div>
+				{% csrf_token %}
+			</form>
+		</div>
+	</div>
 
 </body>
 </html>

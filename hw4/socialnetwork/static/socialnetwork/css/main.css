@@ -1,0 +1,62 @@
+body {
+	background: none repeat scroll 0 0 #506987;
+	min-width: 400px;
+}
+
+.body {
+	max-width: 1000px;
+	margin: auto;
+	padding: 10px 0;
+	text-align: center;
+}
+
+h3 {
+	margin: 0 15px;
+}
+
+.header {
+	margin: 10px 0;
+	float: left;
+}
+
+.error {
+	color: #f5785a;
+	font-size: 1.3em;
+	font-weight: bold;
+}
+
+.sonet {
+	color: #b9c5ec;
+	font-family: calligraphy-brotherhood;
+	font-size: 4em;
+	font-weight: bold;
+}
+
+.heading {
+	color: #dedede;
+	font-size: 25px;
+}
+
+.heading-wrapper {
+	margin: 10px 0;
+}
+
+.calligraphy {
+	color: #dedede;
+	font-family: calligraphy-wolf;
+	font-size: 10em;
+}
+
+.inline {
+	display: inline;
+}
+
+@font-face {
+	font-family: calligraphy-wolf;
+	src: url(../Wolf_in_the_City_Light.ttf);
+}
+
+@font-face {
+	font-family: calligraphy-brotherhood;
+	src: url(../Brotherhood_Script.ttf);
+}

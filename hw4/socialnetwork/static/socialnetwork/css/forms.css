@@ -1,0 +1,45 @@
+.login, .register {
+	width: -moz-fit-content;
+	margin: auto;
+}
+
+.form {
+	margin: 25px 0;
+	font-size: 1.3em;
+}
+
+.form tr {
+	height: 65px;
+}
+
+.form .label, .form label {
+	color: #dedede;
+	margin-right: 40px;
+}
+
+.form .label {
+	margin-right: 20px;
+}
+
+.form input {
+	background: none repeat scroll 0 0 #f6f6f6;
+	border-radius: 5px;
+	border-style: none;
+	font-size: 1em;
+}
+
+.register-link {
+	color: #d6d6d6;
+	font-style: italic;
+	font-weight: bold;
+	text-decoration: none;
+}
+.register-link:hover {
+	color: #A6A6A6
+}
+
+.submit {
+	display: block;
+	margin: 25px auto auto;
+	padding: 10px 20px;
+}

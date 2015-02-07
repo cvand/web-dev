@@ -1,38 +1,55 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Social Network -- Login</title>
+<meta charset="utf-8">
+<title>Social Network -- Login</title>
+
+<link rel="stylesheet" href="{{ STATIC_URL }}socialnetwork/css/main.css" />
+<link rel="stylesheet"
+	href="{{ STATIC_URL }}socialnetwork/css/forms.css" />
+<script src="{{ STATIC_URL }}socialnetwork/js/socialnetwork.js"></script>
 </head>
 
 <body>
-    {% if form.errors %}
-        <p style="color:red">
-            Incorrect user name and password.
-        </p>
-    {% endif %}
+	<div class="header">
+		<span class="sonet">SoNet</span>
+	</div>
+	<div align="center" class="body">
+		<div class="heading-wrapper">
+			<h3 class="calligraphy">Welcome!</h3>
+			<span class="welcome">Please sign in below</span>
+		</div>
 
-    <p>
-        Log in to see your private todo list:
-    </p>
+		{% if form.errors %}
+		<div align="center" class="error-wrapper">
+			<p class="error">Incorrect user name or password.</p>
+		</div>
+		{% endif %}
 
-    <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-        <table>
-        <tr>
-            <td>{{ form.username.label_tag }}</td>
-            <td>{{ form.username }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.password.label_tag }}</td>
-            <td>{{ form.password }}</td>
-        </tr>
-        </table>
+		<div class="login">
+			<form method="post"
+				action="{% url 'django.contrib.auth.views.login' %}">
+				<div class="form">
+					<table>
+						<tr>
+							<td class="label">{{ form.username.label_tag }}</td>
+							<td class="input">{{ form.username }}</td>
+						</tr>
+						<tr>
+							<td class="label">{{ form.password.label_tag }}</td>
+							<td class="input">{{ form.password }}</td>
+						</tr>
+					</table>
+					<span class="label inline">Not already a user?  </span>
+					<a class="register-link" href="/socialnetwork/register">Register</a>
+					<input class="submit" type="submit" value="Login" />
+					<input type="hidden" name="next" value="{{ next }}" />
+				</div>
 
-        <input type="submit" value="Login" />
-        <a href="/socialnetwork/register">Register</a>
-        <input type="hidden" name="next" value="{{ next }}" />
-        {% csrf_token %}
-    </form>
+				{% csrf_token %}
+			</form>
+		</div>
+	</div>
 
 </body>
 </html>
