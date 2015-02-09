@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -24,7 +23,7 @@ def home(request):
 def profile(request, id):
     user = User.objects.filter(id=id)
     posts = Post.objects.filter(user=user).order_by('-creation_date')
-    return render(request, 'socialnetwork/profile.html', {'posts' : posts})
+    return render(request, 'socialnetwork/profile.html', {'posts' : posts, 'user' : request.user})
 
 @login_required
 @transaction.atomic
@@ -35,9 +34,11 @@ def add_post(request):
     if not 'postcontent' in request.POST or not request.POST['postcontent']:
         errors.append('You must enter some content to post.')
     else:
-        new_post = Post(content=request.POST['postcontent'], user=request.user, creation_date=datetime.now())
+        new_post = Post(content=request.POST['postcontent'], user=request.user)
         new_post.save()
-
+    
+    print "new post added: "
+    print new_post.creation_date
     posts = Post.objects.all()
     context = {'posts' : posts, 'errors' : errors}
     return render(request, 'socialnetwork/home.html', context)
@@ -45,19 +46,24 @@ def add_post(request):
 
 @login_required
 @transaction.atomic
-def delete_post(request, id):
+def delete_post(request, post_id, pageref):
     errors = []
-
+    
     # Deletes post if the logged-in user has an post matching the id
     try:
-        post_to_delete = Post.objects.get(id=id, user=request.user)
+        post_to_delete = Post.objects.get(id=post_id, user=request.user)
         post_to_delete.delete()
     except ObjectDoesNotExist:
         errors.append('This post either does not exist or is owned by another user.')
-
+    
     posts = Post.objects.all()
+    url = 'socialnetwork/home.html'
+    if (pageref == 'profile'):
+        posts = Post.objects.filter(user=request.user)
+        url = 'socialnetwork/profile.html'
+
     context = {'posts' : posts, 'errors' : errors}
-    return render(request, 'socialnetwork/home.html', context)
+    return render(request, url, context)
 
 
 @transaction.atomic
@@ -71,6 +77,20 @@ def register(request):
         return render(request, 'socialnetwork/register.html', context)
 
     # Checks the validity of the form data
+    if not 'first' in request.POST or not request.POST['first']:
+        errors.append('First Name is required.')
+    else:
+        # Save the first in the request context to re-fill the first
+        # field in case the form has errrors
+        context['first'] = request.POST['first']
+
+    if not 'last' in request.POST or not request.POST['username']:
+        errors.append('Last name is required.')
+    else:
+        # Save the last in the request context to re-fill the last
+        # field in case the form has errrors
+        context['last'] = request.POST['last']
+
     if not 'username' in request.POST or not request.POST['username']:
         errors.append('Username is required.')
     else:
@@ -88,15 +108,14 @@ def register(request):
             and request.POST['password1'] != request.POST['password2']:
         errors.append('Passwords did not match.')
 
-    if len(User.objects.filter(username = request.POST['username'])) > 0:
+    if len(User.objects.filter(username=request.POST['username'])) > 0:
         errors.append('Username is already taken.')
 
     if errors:
         return render(request, 'socialnetwork/register.html', context)
 
     # Creates the new user from the valid form data
-    new_user = User.objects.create_user(username=request.POST['username'], \
-                                        password=request.POST['password1'])
+    new_user = User.objects.create_user(username=request.POST['username'], password=request.POST['password1'], first_name=request.POST['first'], last_name=request.POST['last'])
     new_user.save()
 
     # Logs in the new user and redirects to his/her todo list

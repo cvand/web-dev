@@ -5,7 +5,7 @@
 
 .form {
 	margin: 25px 0;
-	font-size: 1.3em;
+	font-size: 1.1em;
 }
 
 .form tr {
@@ -28,18 +28,14 @@
 	font-size: 1em;
 }
 
-.register-link {
-	color: #d6d6d6;
+.register.link {
 	font-style: italic;
 	font-weight: bold;
-	text-decoration: none;
-}
-.register-link:hover {
-	color: #A6A6A6
 }
 
 .submit {
 	display: block;
 	margin: 25px auto auto;
 	padding: 10px 20px;
+	color: #464646;
 }

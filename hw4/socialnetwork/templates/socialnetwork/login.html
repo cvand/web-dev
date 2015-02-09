@@ -12,12 +12,12 @@
 
 <body>
 	<div class="header">
-		<span class="sonet">SoNet</span>
+		<a href="/socialnetwork/" class="sonet">SoNet</a>
 	</div>
 	<div align="center" class="body">
 		<div class="heading-wrapper">
 			<h3 class="calligraphy">Welcome!</h3>
-			<span class="welcome">Please sign in below</span>
+			<span class="heading">Please sign in below</span>
 		</div>
 
 		{% if form.errors %}
@@ -41,7 +41,7 @@
 						</tr>
 					</table>
 					<span class="label inline">Not already a user?  </span>
-					<a class="register-link" href="/socialnetwork/register">Register</a>
+					<a class="register link" href="/socialnetwork/register">Register</a>
 					<input class="submit" type="submit" value="Login" />
 					<input type="hidden" name="next" value="{{ next }}" />
 				</div>

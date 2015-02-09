@@ -1,6 +1,4 @@
-from django.conf.urls import patterns, include, url
-from django.contrib import admin
-from django.views.generic.base import RedirectView
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
     # Examples:
@@ -15,5 +13,5 @@ urlpatterns = patterns('',
     url(r'^profile/(?P<id>\d+)$', 'socialnetwork.views.profile'),
     
     url(r'^add-post', 'socialnetwork.views.add_post'),
-    url(r'^delete-post/(?P<id>\d+)$', 'socialnetwork.views.delete_post'),
+    url(r'^delete-post/(?P<post_id>\d+)/(?P<pageref>\w+)$', 'socialnetwork.views.delete_post'),
 )

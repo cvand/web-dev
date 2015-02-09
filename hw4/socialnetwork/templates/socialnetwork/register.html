@@ -12,10 +12,11 @@
 
 <body>
 	<div class="header">
-		<span class="sonet">SoNet</span>
+		<a href="/socialnetwork/" class="sonet">SoNet</a>
 	</div>
 	<div align="center" class="body">
 		<div class="heading-wrapper">
+			<h3 class="calligraphy">Welcome!</h3>
 			<span class="heading">Please sign up below</span>
 		</div>
 
@@ -30,6 +31,14 @@
 			<form method="post" action="/socialnetwork/register">
 				<div class="form">
 					<table>
+						<tr>
+							<td><label>First Name:</label></td>
+							<td><input type="text" name="first" value="{{first}}"></td>
+						</tr>
+						<tr>
+							<td><label>Last Name:</label></td>
+							<td><input type="text" name="last" value="{{last}}"></td>
+						</tr>
 						<tr>
 							<td><label>Username:</label></td>
 							<td><input type="text" name="username" value="{{username}}"></td>

@@ -2,26 +2,87 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Profile</title>
+<title>Social Network - Profile</title>
+<link rel="stylesheet" href="{{ STATIC_URL }}socialnetwork/css/main.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}socialnetwork/css/grid.css" />
+<link rel="stylesheet"
+	href="{{ STATIC_URL }}socialnetwork/css/posts.css" />
+<link rel="stylesheet"
+	href="{{ STATIC_URL }}socialnetwork/css/forms.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type='text/javascript' src='{{STATIC_URL}}socialnetwork/js/socialnetwork.js'></script>
 </head>
 
 <body>
+	<div class="header">
+		<a href="/socialnetwork/" class="sonet">SoNet</a>
+		<div class="navbar fright last">
+			<a class="link" href="/socialnetwork/logout"><img class="logout icon" src="{{STATIC_URL}}socialnetwork/images/logout.png"><span class="nav"> Logout</span></a>
+		</div>
+		<div class="fright separator"></div>
+		<div class="navbar fright">
+			<a class="link" href="/socialnetwork/"><img class="icon" src="{{STATIC_URL}}socialnetwork/images/home.png"><span class="nav"> Home</span></a>
+		</div>
+	</div>
+
+	<div align="center" class="body">
+		<div class="heading-wrapper">
+			<h3 class="calligraphy small">Profile</h3>
+		</div>
+	</div>
+
 	{% for error in errors %}
-	<p style="color: red">{{error}}</p>
+	<div align="center" class="error-wrapper">
+		<span class="error">{{ error }}</span>
+	</div>
 	{% endfor %}
 
-	<p>Current todo list:
-	<ol>
-		{% for post in posts %}
-		<li><a href="/socialnetwork/delete-post/{{post.id}}">X</a>
-			{{post}} {% endfor %}
-	</ol>
-	</p>
-
-	<p>
-		<a href="/socialnetwork/logout">Logout</a>
-	</p>
-
+	<div class="content">
+		<div class="info column">
+			<img class="w100" src="{{STATIC_URL}}socialnetwork/images/user.png"
+				alt="User">
+			<div class="row">
+				<label>First name:</label>
+				<span>{{user.first_name}}</span>
+			</div>
+			<div class="row">
+				<label>Last name:</label>
+				<span>{{user.last_name}}</span>
+			</div>
+			<div class="row">
+				<label>Username:</label>
+				<span>{{user.username}}</span>
+			</div>
+		</div>
+		<div id="posts-wrapper" class="posts column">
+			<div id="posts-list" class="history">
+				{% if not posts %}
+					<div align="center"><span>No posts</span></div>
+				{% endif %}
+			
+				{% for post in posts %}
+				<div class="wrapper">
+					<div class="post-wrapper top">
+						<a class="post-user link"
+							href="/socialnetwork/profile/{{post.user.id}}">{{post.user.username}}</a>
+						{% if post.user == user %}
+						<a class="delete-action" href="/socialnetwork/delete-post/{{post.id}}/profile">
+							<img class="delete"
+								src="{{STATIC_URL}}socialnetwork/images/post_delete.png">
+						</a>
+						{% endif %}
+						<div class="post-content">
+							<span>{{post}}</span>
+						</div>
+					</div>
+					<div class="post-wrapper bottom">
+						<span class="post-date">{{post.creation_date}}</span>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 </body>
 </html>
 
