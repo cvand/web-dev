@@ -9,19 +9,28 @@
 	href="{{ STATIC_URL }}socialnetwork/css/posts.css" />
 <link rel="stylesheet"
 	href="{{ STATIC_URL }}socialnetwork/css/forms.css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type='text/javascript' src='{{STATIC_URL}}socialnetwork/js/socialnetwork.js'></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type='text/javascript'
+	src='{{STATIC_URL}}socialnetwork/js/socialnetwork.js'></script>
 </head>
 
 <body>
 	<div class="header">
 		<a href="/socialnetwork/" class="sonet">SoNet</a>
 		<div class="navbar fright last">
-			<a class="link" href="/socialnetwork/logout"><img class="logout icon" src="{{STATIC_URL}}socialnetwork/images/logout.png"><span class="nav"> Logout</span></a>
+			<a class="link" href="/socialnetwork/logout">
+				<img class="logout icon"
+					src="{{STATIC_URL}}socialnetwork/images/logout.png">
+				<span class="nav"> Logout</span>
+			</a>
 		</div>
 		<div class="fright separator"></div>
 		<div class="navbar fright">
-			<a class="link" href="/socialnetwork/"><img class="icon" src="{{STATIC_URL}}socialnetwork/images/home.png"><span class="nav"> Home</span></a>
+			<a class="link" href="/socialnetwork/">
+				<img class="icon" src="{{STATIC_URL}}socialnetwork/images/home.png">
+				<span class="nav"> Home</span>
+			</a>
 		</div>
 	</div>
 
@@ -57,16 +66,19 @@
 		<div id="posts-wrapper" class="posts column">
 			<div id="posts-list" class="history">
 				{% if not posts %}
-					<div align="center"><span>No posts</span></div>
-				{% endif %}
-			
-				{% for post in posts %}
+				<div align="center">
+					<span>No posts</span>
+				</div>
+				{% endif %} {% for post in posts %}
 				<div class="wrapper">
 					<div class="post-wrapper top">
+						<img class="icon post-user inline"
+							src="{{STATIC_URL}}socialnetwork/images/user_post.png">
 						<a class="post-user link"
 							href="/socialnetwork/profile/{{post.user.id}}">{{post.user.username}}</a>
 						{% if post.user == user %}
-						<a class="delete-action" href="/socialnetwork/delete-post/{{post.id}}/profile">
+						<a class="delete-action"
+							href="/socialnetwork/delete-post/{{post.id}}/profile">
 							<img class="delete"
 								src="{{STATIC_URL}}socialnetwork/images/post_delete.png">
 						</a>

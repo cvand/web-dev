@@ -21,7 +21,7 @@
 	margin-right: 20px;
 }
 
-.form input {
+.form input, input {
 	background: none repeat scroll 0 0 #f6f6f6;
 	border-radius: 5px;
 	border-style: none;
@@ -38,4 +38,32 @@
 	margin: 25px auto auto;
 	padding: 10px 20px;
 	color: #464646;
+	font-size: 0.7em !important;
+}
+
+.new-post .submit {
+	margin-top: 0;
+}
+
+form .counter {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+	border: medium none;
+	color: #d6d6d6;
+	font-size: 0.75em;
+}
+
+textarea {
+	border-radius: 15px;
+	font-size: 18px;
+	padding: 15px;
+	resize: none;
+	vertical-align: middle;
+	width: 360px;
+	font-family: "Georgia", Helvetica, serif;
+}
+
+.postit {
+	background: url("../images/mail.png") no-repeat scroll 0 0/45px auto
+		rgba(0, 0, 0, 0);
+	cursor: pointer;
 }

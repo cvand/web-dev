@@ -2,7 +2,7 @@ body {
 	background: none repeat scroll 0 0 #506987;
 	min-width: 400px;
 	color: #d6d6d6;
-	font-size: 23px;
+	font-size: 20px;
 }
 
 @font-face {
@@ -77,7 +77,7 @@ label {
 }
 
 .inline {
-	display: inline;
+	display: inline !important;
 }
 
 .fleft {
@@ -99,8 +99,8 @@ label {
 }
 
 .content {
-	max-width: 1000px;
 	margin: auto;
+	width: -moz-fit-content;
 }
 
 .link {
@@ -113,9 +113,9 @@ label {
 }
 
 .navbar {
-  border-right: medium solid;
-  margin: 0 3px;
-  padding: 0 7px 0 0;
+	border-right: medium solid;
+	margin: 0 3px;
+	padding: 0 7px 0 0;
 }
 
 .separator {
@@ -137,8 +137,18 @@ label {
 }
 
 .logout.icon {
-  background: none repeat scroll 0 0 #f54d70;
-  border-radius: 30px;
-  padding: 5px;
-  width: 20px;
+	background: none repeat scroll 0 0 #f54d70;
+	border-radius: 30px;
+	padding: 5px;
+	width: 20px;
+}
+
+.new-post {
+	margin: auto auto 20px;
+	width: -moz-fit-content;
+}
+
+.history {
+	margin: auto;
+	width: -moz-fit-content;
 }

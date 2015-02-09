@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}socialnetwork/css/main.css" />
 <link rel="stylesheet"
 	href="{{ STATIC_URL }}socialnetwork/css/forms.css" />
-<script src="{{ STATIC_URL }}socialnetwork/js/socialnetwork.js"></script>
 </head>
 
 <body>
@@ -20,11 +19,11 @@
 			<span class="heading">Please sign up below</span>
 		</div>
 
-		{% if form.errors %}
+		{% for error in errors %}
 		<div align="center" class="error-wrapper">
 			<span class="error">{{ error }}</span>
 		</div>
-		{% endif %}
+		{% endfor %}
 
 		<div class="register">
 

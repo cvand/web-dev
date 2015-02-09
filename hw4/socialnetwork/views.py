@@ -23,6 +23,7 @@ def home(request):
 def profile(request, id):
     user = User.objects.filter(id=id)
     posts = Post.objects.filter(user=user).order_by('-creation_date')
+    
     return render(request, 'socialnetwork/profile.html', {'posts' : posts, 'user' : request.user})
 
 @login_required
@@ -36,10 +37,8 @@ def add_post(request):
     else:
         new_post = Post(content=request.POST['postcontent'], user=request.user)
         new_post.save()
-    
-    print "new post added: "
-    print new_post.creation_date
-    posts = Post.objects.all()
+        
+    posts = Post.objects.all().order_by('-creation_date')
     context = {'posts' : posts, 'errors' : errors}
     return render(request, 'socialnetwork/home.html', context)
     
@@ -56,10 +55,11 @@ def delete_post(request, post_id, pageref):
     except ObjectDoesNotExist:
         errors.append('This post either does not exist or is owned by another user.')
     
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-creation_date')
     url = 'socialnetwork/home.html'
+    
     if (pageref == 'profile'):
-        posts = Post.objects.filter(user=request.user)
+        posts = Post.objects.filter(user=request.user).order_by('-creation_date')
         url = 'socialnetwork/profile.html'
 
     context = {'posts' : posts, 'errors' : errors}

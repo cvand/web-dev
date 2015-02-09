@@ -1,6 +1,7 @@
 .wrapper {
 	margin-bottom: 10px;
 	min-width: 500px;
+	max-width: 650px;
 }
 
 .post-wrapper {
@@ -19,16 +20,22 @@
 .post-user {
 	font-size: 0.7em;
 	font-weight: 700;
-	left: 10px;
+	left: 6px;
 	letter-spacing: 1px;
 	position: absolute;
 	text-decoration: none;
-	top: 4px;
+	top: 3px;
+}
+
+.post-user.link {
+	left: 45px;
+	top: 8px;
 }
 
 .post-content {
 	border-top: medium solid;
-	margin: 25px 10px 5px;
+	margin: 37px 10px 5px;
+	color: #666666;
 }
 
 .post-wrapper.bottom {
@@ -43,6 +50,11 @@
 
 .delete {
 	float: right;
-	margin: 10px;
+	margin: 15px 5px 10px 10px;
 	width: 40px;
+}
+
+.post-content > span {
+  max-width: -moz-available;
+  word-wrap: break-word;
 }
