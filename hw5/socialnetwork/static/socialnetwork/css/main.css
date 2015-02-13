@@ -1,0 +1,154 @@
+body {
+	background: none repeat scroll 0 0 #506987;
+	min-width: 400px;
+	color: #d6d6d6;
+	font-size: 20px;
+}
+
+@font-face {
+	font-family: calligraphy-wolf;
+	src: url(../Wolf_in_the_City_Light.ttf);
+}
+
+@font-face {
+	font-family: calligraphy-brotherhood;
+	src: url(../Brotherhood_Script.ttf);
+}
+
+h3 {
+	margin: 0 15px;
+}
+
+label {
+	font-weight: bold;
+	margin-right: 15px;
+}
+
+.body {
+	max-width: 1000px;
+	margin: auto;
+	padding: 10px 0;
+	text-align: center;
+}
+
+.header {
+	margin: 10px 0;
+	padding-right: 20px;
+	position: absolute;
+	top: 0;
+	width: -moz-available;
+}
+
+.heading {
+	color: #dedede;
+	font-size: 25px;
+}
+
+.heading-wrapper {
+	margin: 10px 0;
+}
+
+.no-welcome {
+	padding-top: 110px;
+}
+
+.error {
+	color: #f5785a;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+.sonet {
+	color: #b9c5ec;
+	font-family: calligraphy-brotherhood;
+	font-size: 3em;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.calligraphy {
+	color: #dedede;
+	font-family: calligraphy-wolf;
+	font-size: 8em;
+}
+
+.small {
+	font-size: 4em;
+}
+
+.inline {
+	display: inline !important;
+}
+
+.fleft {
+	float: left;
+}
+
+.fright {
+	float: right;
+}
+
+.w100 {
+	width: 100px;
+}
+
+.info {
+	background: none repeat scroll 0 0 #35586c;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+.content {
+	margin: auto;
+	width: -moz-fit-content;
+}
+
+.link {
+	color: #d6d6d6;
+	text-decoration: none;
+}
+
+.link:hover {
+	color: #A6A6A6
+}
+
+.navbar {
+	border-right: medium solid;
+	margin: 0 3px;
+	padding: 0 7px 0 0;
+}
+
+.separator {
+	border-right: solid;
+	line-height: 20px;
+	width: 3px;
+}
+
+.last {
+	border: none;
+}
+
+.icon {
+	width: 30px;
+}
+
+.nav {
+	vertical-align: super;
+}
+
+.logout.icon {
+	background: none repeat scroll 0 0 #f54d70;
+	border-radius: 30px;
+	padding: 5px;
+	width: 20px;
+}
+
+.new-post {
+	margin: auto auto 20px;
+	width: -moz-fit-content;
+}
+
+.history {
+	margin: auto;
+	width: -moz-fit-content;
+}
