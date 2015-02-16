@@ -37,6 +37,9 @@ class RegistrationForm(forms.Form):
         # Confirms that the username is not already present in the
         # User model database.
         username = self.cleaned_data.get('username')
+        if username == ' ':
+            raise forms.ValidationError("Please enter a valid username.")
+        
         if User.objects.filter(username__exact=username):
             raise forms.ValidationError("Username is already taken.")
 
@@ -65,3 +68,73 @@ class PostForm(forms.ModelForm):
             raise forms.ValidationError("The post content cannot be empty.")
             
         return post_content
+
+class EditInfoForm(forms.ModelForm):
+    class Meta:
+        model = UserInfo
+        exclude = (
+            'user',
+            'content_type',
+        )
+        widgets = {
+          'short_bio': forms.Textarea(attrs={'rows':5, 'cols':20}),
+        }
+    
+    def clean(self):
+        cleaned_data = super(EditInfoForm, self).clean()
+        
+        age = cleaned_data.get('age')
+        if age:
+            if age <= 0:
+                raise forms.ValidationError("Your age is not valid.")
+        
+        
+        return cleaned_data
+
+class EditUserForm(forms.Form):
+    first_name = forms.CharField(max_length=20)
+    last_name = forms.CharField(max_length=20)
+    password1 = forms.CharField(max_length=200,
+                                 label='Password',
+                                 widget=forms.PasswordInput())
+    password2 = forms.CharField(max_length=200,
+                                 label='Confirm password',
+                                 widget=forms.PasswordInput())
+
+    def __init__(self, *args, **kwargs):
+        super(EditUserForm, self).__init__(*args, **kwargs)
+        self.fields['password1'].required = False
+        self.fields['password2'].required = False
+        self.fields['password1'].widget.attrs['autocomplete'] = 'off'
+        self.fields['password2'].widget.attrs['autocomplete'] = 'off'
+        
+    def clean(self):
+        cleaned_data = super(EditUserForm, self).clean()
+
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+        
+        cleaned_data['changed_password'] = False
+        if (password1 and (not password2)) or ((not password1) and password2):
+            raise forms.ValidationError("Please reenter password.")
+        
+        if password1 and password2:
+            cleaned_data['changed_password'] = True
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords did not match.")
+
+        # We must return the cleaned data we got from our parent.
+        return cleaned_data
+
+class LoginForm(forms.ModelForm):
+    class Meta:
+        model = User
+        exclude = (
+            'first_name',
+            'last_name',
+        )
+    
+    def clean(self):
+        cleaned_data = super(LoginForm, self).clean()
+        return cleaned_data

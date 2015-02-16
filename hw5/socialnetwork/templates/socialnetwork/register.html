@@ -1,40 +1,18 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Social Network -- Register</title>
+{% extends "socialnetwork/header.html" %} 
 
-<link rel="stylesheet" href="{{ STATIC_URL }}socialnetwork/css/main.css" />
-<link rel="stylesheet"
-	href="{{ STATIC_URL }}socialnetwork/css/forms.css" />
-</head>
+{% block heading %}
+<h3 class="calligraphy">Welcome!</h3>
+<span class="heading">Please sign up below</span>
+{% endblock %}
 
-<body>
-	<div class="header">
-		<a href="/socialnetwork/" class="sonet">SoNet</a>
-	</div>
-	<div align="center" class="body">
-		<div class="heading-wrapper">
-			<h3 class="calligraphy">Welcome!</h3>
-			<span class="heading">Please sign up below</span>
-		</div>
-
-		{% for error in errors %}
-		<div align="center" class="error-wrapper">
-			<span class="error">{{ error }}</span>
-		</div>
-		{% endfor %}
-
-		<div class="register">
-			<form method="post" action="{% url 'register' %}">
-				<table>{{form}}
-				</table>
-				{% csrf_token %}
-				<input class="submit" type="submit" value="Register" />
-			</form>
-		</div>
-	</div>
-
-</body>
-</html>
+{% block content %}
+<div class="register">
+	<form method="post" action="{% url 'register' %}">
+		<table>{{form}}{{userinfo_form}}
+		</table>
+		{% csrf_token %}
+		<input class="submit" type="submit" value="Register" />
+	</form>
+</div>
+{% endblock %}
 

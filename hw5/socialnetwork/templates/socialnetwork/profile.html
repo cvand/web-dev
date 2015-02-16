@@ -1,100 +1,146 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Social Network - Profile</title>
-<link rel="stylesheet" href="{{ STATIC_URL }}socialnetwork/css/main.css" />
-<link rel="stylesheet" href="{{ STATIC_URL }}socialnetwork/css/grid.css" />
-<link rel="stylesheet"
-	href="{{ STATIC_URL }}socialnetwork/css/posts.css" />
-<link rel="stylesheet"
-	href="{{ STATIC_URL }}socialnetwork/css/forms.css" />
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type='text/javascript'
-	src='{{STATIC_URL}}socialnetwork/js/socialnetwork.js'></script>
-</head>
+{% extends "socialnetwork/header.html" %}
+{% load static %}
+{% block heading %}
+	<h3 class="calligraphy small">Profile</h3>
+{% endblock %}
 
-<body>
-	<div class="header">
-		<a href="/socialnetwork/" class="sonet">SoNet</a>
-		<div class="navbar fright last">
-			<a class="link" href="/socialnetwork/logout">
-				<img class="logout icon"
-					src="{{STATIC_URL}}socialnetwork/images/logout.png">
-				<span class="nav"> Logout</span>
-			</a>
+{% block content %}
+<div class="info column">
+	{% if userinfo.image %} 
+		<img class="w100" src="{% static 'socialnetwork/images/' userinfo.image %}" alt="{{user.username}}"> 
+	{% else %} 
+		<img class="w100"
+			src="{% static 'socialnetwork/images/user.png' %}" alt="User"> 
+	{% endif %}
+	{% if editable %}
+		<a class="edit action fright" onclick="return toggleEdit(false);">
+			<img class="icon" src="{% static 'socialnetwork/images/edit.png' %}">
+		</a>
+		<a id="cancel" class="cancel action fright" onclick="return toggleEdit(true);">
+			<img class="icon" src="{% static 'socialnetwork/images/cancel.png' %}">
+		</a>
+		<a id="submit" class="action fright" onclick="return submit();">
+			<img class="icon" src="{% static 'socialnetwork/images/submit.png' %}">
+		</a>
+		<div class="row">
+			<label>Username:</label>
+			<span>{{user.username}}</span>
 		</div>
-		<div class="fright separator"></div>
-		<div class="navbar fright">
-			<a class="link" href="/socialnetwork/">
-				<img class="icon" src="{{STATIC_URL}}socialnetwork/images/home.png">
-				<span class="nav"> Home</span>
-			</a>
-		</div>
+		<form id="user-edit" action="{% url 'edit-profile' %}" method="post">
+			<table>{{user_form}}{{edit_form}}
+			</table>
+			{% csrf_token %}
+		</form>
+	{% else %}
+	<a class="link follow fright" onclick="return toggleFollow(this);" href="{% url 'follow' user.id %}">Following</a>
+	<div class="row">
+		<label>First name:</label>
+		<span>{{user.first_name}}</span>
 	</div>
-
-	<div align="center" class="body">
-		<div class="heading-wrapper">
-			<h3 class="calligraphy small">Profile</h3>
-		</div>
+	<div class="row">
+		<label>Last name:</label>
+		<span>{{user.last_name}}</span>
 	</div>
-
-	{% for error in errors %}
-	<div align="center" class="error-wrapper">
-		<span class="error">{{ error }}</span>
+	<div class="row">
+		<label>Age:</label>
+		<span>{{userinfo.age}}</span>
 	</div>
-	{% endfor %}
-
-	<div class="content">
-		<div class="info column">
-			<img class="w100" src="{{STATIC_URL}}socialnetwork/images/user.png"
-				alt="User">
-			<div class="row">
-				<label>First name:</label>
-				<span>{{user.first_name}}</span>
-			</div>
-			<div class="row">
-				<label>Last name:</label>
-				<span>{{user.last_name}}</span>
-			</div>
-			<div class="row">
-				<label>Username:</label>
-				<span>{{user.username}}</span>
-			</div>
+	<div class="row">
+		<label>Username:</label>
+		<span>{{user.username}}</span>
+	</div>
+	<div class="row">
+		<label>Short bio:</label>
+		<span>{{userinfo.short_bio}}</span>
+	</div>
+{% endif %}
+</div>
+<div id="posts-wrapper" class="posts column">
+	<div id="posts-list" class="history">
+		{% if not posts %}
+		<div align="center">
+			<span>No posts</span>
 		</div>
-		<div id="posts-wrapper" class="posts column">
-			<div id="posts-list" class="history">
-				{% if not posts %}
-				<div align="center">
-					<span>No posts</span>
+		{% endif %} 
+		{% for post in posts %}
+		<div class="wrapper">
+			<div class="post-wrapper top">
+				<img class="icon post-user inline" src="{% static 'socialnetwork/images/user_post.png' %}">
+				<a class="post-user link" href="{% url 'profile' post.user.id %}">{{post.user.username}}</a>
+				{% if post.user == user %}
+				<a class="delete-action" href="{% url 'delete' post.id 'profile' %}">
+					<img class="delete" src="{% static 'socialnetwork/images/post_delete.png' %}">
+				</a>
+				{% endif %}
+				<div class="post-content">
+					<span>{{post}}</span>
 				</div>
-				{% endif %} {% for post in posts %}
-				<div class="wrapper">
-					<div class="post-wrapper top">
-						<img class="icon post-user inline"
-							src="{{STATIC_URL}}socialnetwork/images/user_post.png">
-						<a class="post-user link"
-							href="/socialnetwork/profile/{{post.user.id}}">{{post.user.username}}</a>
-						{% if post.user == user %}
-						<a class="delete-action"
-							href="/socialnetwork/delete-post/{{post.id}}/profile">
-							<img class="delete"
-								src="{{STATIC_URL}}socialnetwork/images/post_delete.png">
-						</a>
-						{% endif %}
-						<div class="post-content">
-							<span>{{post}}</span>
-						</div>
-					</div>
-					<div class="post-wrapper bottom">
-						<span class="post-date">{{post.creation_date}}</span>
-					</div>
-				</div>
-				{% endfor %}
 			</div>
+			<div class="post-wrapper bottom">
+					<span class="post-date">{{post.creation_date}}</span>
+				</div>
 		</div>
+		{% endfor %}
 	</div>
-</body>
-</html>
+</div>
 
+<script>
+	$(function() {
+
+		toggleEdit(true);
+
+		$('#id_short_bio').prop('cols', 20);
+		$('#id_short_bio').width(190);
+	});
+
+	function toggleEdit(flag) {
+
+		var elements = $("form#user-edit :input");
+		elements.each(function(index, el) {
+
+			$(el).prop('disabled', flag);
+		});
+
+		var label = $('label[for="id_password2"]');
+		label.parent().parent().prop('hidden', flag);
+		label = $('label[for="id_password1"]');
+		label.parent().parent().prop('hidden', flag);
+
+		if (!flag) {
+			$('#submit').removeClass('hidden');
+			$('#cancel').removeClass('hidden');
+		}
+		else {
+			$('#submit').addClass('hidden');
+			$('#cancel').addClass('hidden');
+		}
+
+		return false;
+	}
+
+	function submit() {
+		document.getElementById("user-edit").submit();
+		return false;
+	}
+	
+
+	function toggleFollow(element) {
+		var text = $(element).text();
+		var href = $(element).attr('href');
+		var params;
+		if (text == "Follow Me!") {
+			params = '?follow=follow';
+			text = "Following";
+		} else if (text == "Following") {
+			params = '?follow=unfollow';
+			text = "Follow Me!";
+		}
+		
+		$.get(href + params, function(data) {
+			$(element).text(text);
+		});
+		
+		return false;
+	}
+</script>
+{% endblock %}

@@ -1,8 +1,9 @@
 body {
 	background: none repeat scroll 0 0 #506987;
-	min-width: 400px;
 	color: #d6d6d6;
 	font-size: 20px;
+	margin: 0;
+	min-width: 400px;
 }
 
 @font-face {
@@ -20,8 +21,12 @@ h3 {
 }
 
 label {
+	display: inline-block;
 	font-weight: bold;
 	margin-right: 15px;
+	max-width: 300px;
+	min-width: 100px;
+	text-align: right;
 }
 
 .body {
@@ -32,10 +37,9 @@ label {
 }
 
 .header {
-	margin: 10px 0;
+	background: none repeat scroll 0 0 #aacacc;
+	margin: 10px 0 0;
 	padding-right: 20px;
-	position: absolute;
-	top: 0;
 	width: -moz-available;
 }
 
@@ -45,7 +49,7 @@ label {
 }
 
 .heading-wrapper {
-	margin: 10px 0;
+	margin: 0 0 10px;
 }
 
 .no-welcome {
@@ -59,11 +63,12 @@ label {
 }
 
 .sonet {
-	color: #b9c5ec;
+	color: #464646;
 	font-family: calligraphy-brotherhood;
 	font-size: 3em;
 	font-weight: bold;
 	text-decoration: none;
+	margin: 0 10px;
 }
 
 .calligraphy {
@@ -78,6 +83,14 @@ label {
 
 .inline {
 	display: inline !important;
+}
+
+.block {
+	display: block;
+}
+
+.hidden {
+	display: none !important;
 }
 
 .fleft {
@@ -113,15 +126,15 @@ label {
 }
 
 .navbar {
-	border-right: medium solid;
-	margin: 0 3px;
-	padding: 0 7px 0 0;
+	display: inline;
+	text-align: right;
+	margin-top: 10px
 }
 
-.separator {
-	border-right: solid;
-	line-height: 20px;
-	width: 3px;
+.navtab {
+	display: inline;
+	margin: 10px 3px 0;
+	padding: 0 7px 0 0;
 }
 
 .last {
@@ -132,7 +145,20 @@ label {
 	width: 30px;
 }
 
+.round {
+	border-radius: 20px;
+}
+
+.separator {
+	border-right: medium solid;
+	display: inline-block;
+	height: 35px;
+	margin: 0 7px;
+	width: 1px;
+}
+
 .nav {
+	color: #464646;
 	vertical-align: super;
 }
 
@@ -151,4 +177,13 @@ label {
 .history {
 	margin: auto;
 	width: -moz-fit-content;
+}
+
+.row > span {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.user {
+  color: #f6f6f6;
 }

@@ -24,18 +24,19 @@
 	letter-spacing: 1px;
 	position: absolute;
 	text-decoration: none;
-	top: 3px;
+	top: 4px;
+	width: 60px;
 }
 
 .post-user.link {
-	left: 45px;
+	left: 80px;
 	top: 8px;
 }
 
 .post-content {
 	border-top: medium solid;
-	margin: 37px 10px 5px;
 	color: #666666;
+	margin: 37px 10px 5px 80px;
 }
 
 .post-wrapper.bottom {
@@ -54,7 +55,16 @@
 	width: 40px;
 }
 
-.post-content > span {
-  max-width: -moz-available;
-  word-wrap: break-word;
+.post-content>span {
+	max-width: -moz-available;
+	word-wrap: break-word;
+}
+
+.following {
+  color: #464646;
+  font-weight: bold;
+}
+
+.follow img {
+	width: 80px;
 }

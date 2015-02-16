@@ -1,0 +1,30 @@
+{% extends "socialnetwork/base.html" %}
+{% load static %}
+{% block header %}
+<a href="/socialnetwork/" class="sonet">SoNet</a>
+<div class="navbar fright">
+	<div class="navtab">
+		<a class="link" href="{% url 'home' %}">
+			<img class="icon" src="{% static 'socialnetwork/images/home.png' %}">
+			<span class="nav"> Home</span>
+		</a>
+	</div>
+	{% if user.id %}
+	<div class="separator"></div>
+	<div class="navtab">
+		<a class="link" href="{% url 'follower-stream' user.id %}">
+			<img class="round icon" src="{% static 'socialnetwork/images/stream.png' %}">
+			<span class="nav"> Followers Stream</span>
+		</a>
+	</div>
+	<div class="separator"></div>
+	<div class="navtab last">
+		<a class="link" href="{% url 'logout' %}">
+			<img class="logout icon" src="{% static 'socialnetwork/images/logout.png' %}">
+			<span class="nav"> Logout</span>
+		</a>
+	</div>
+	<span class="user block">{{user.username}}</span>
+	{% endif %}
+</div>
+{% endblock %}

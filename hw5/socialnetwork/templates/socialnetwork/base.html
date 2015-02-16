@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	{% load staticfiles %}
+	<link rel="stylesheet" href="{% static 'socialnetwork/css/main.css' %}" type="text/css" />
+	<link rel="stylesheet" href="{% static 'socialnetwork/css/grid.css' %}" type="text/css" />
+	<link rel="stylesheet" href="{% static 'socialnetwork/css/forms.css' %}" type="text/css" />
+	<link rel="stylesheet" href="{% static 'socialnetwork/css/posts.css' %}" type="text/css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type='text/javascript' src="{% static 'socialnetwork/js/socialnetwork.js' %}"></script>
+	<title>{% block title %} SoNet - Social Network {% endblock %}</title>
+</head>
+
+<body>
+	<div class="header">{% block header %} {% endblock %}</div>
+	<div align="center" class="body"><div class="heading-wrapper">{% block heading %} {% endblock %}</div></div>
+	
+	{% for error in errors %}
+	<div align="center" class="error-wrapper">
+		<span class="error">{{ error }}</span>
+	</div>
+	{% endfor %}
+	
+	<div class="content">{% block content %} {% endblock %}</div>
+	<div class="footer">{% block footer %} {% endblock %}</div>
+</body>
+</html>

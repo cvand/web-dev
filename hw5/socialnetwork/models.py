@@ -13,4 +13,16 @@ class Post(models.Model):
         return self.post_content
     
     class Meta:
-      get_latest_by = 'creation_date'
+        get_latest_by = 'creation_date'
+      
+class UserInfo(models.Model):
+    user = models.OneToOneField(User, primary_key=True)
+    image = models.ImageField(blank=True, upload_to='images/')
+    content_type = models.CharField(max_length=50)
+    age = models.IntegerField(blank=True, null=True)
+    short_bio = models.TextField(max_length=430, blank=True)
+    
+class Followers(models.Model):
+    following = models.ManyToManyField(User)
+    
+

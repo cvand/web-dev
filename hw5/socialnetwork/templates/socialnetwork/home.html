@@ -1,121 +1,101 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Social Network - Home</title>
-<link rel="stylesheet" href="{{ STATIC_URL }}socialnetwork/css/main.css" />
-<link rel="stylesheet" href="{{ STATIC_URL }}socialnetwork/css/grid.css" />
-<link rel="stylesheet"
-	href="{{ STATIC_URL }}socialnetwork/css/posts.css" />
-<link rel="stylesheet"
-	href="{{ STATIC_URL }}socialnetwork/css/forms.css" />
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type='text/javascript'
-	src='{{STATIC_URL}}socialnetwork/js/socialnetwork.js'></script>
-</head>
+{% extends "socialnetwork/header.html" %} 
+{% load static %}
+{% block heading %}
+	<h3 class="calligraphy small">Posts Feed</h3>
+{% endblock %}
 
-<body>
-	<div class="header">
-		<a href="/socialnetwork/" class="sonet">SoNet</a>
-		<div class="navbar fright last">
-			<a class="link" href="/socialnetwork/logout">
-				<img class="logout icon"
-					src="{{STATIC_URL}}socialnetwork/images/logout.png">
-				<span class="nav"> Logout</span>
-			</a>
+{% block content %}
+<div class="new-post">
+	<form action="{% url 'add' %}" method="post">
+		<div class="add-post-form">
+			<table>{{form}}
+			</table>
+			{% csrf_token %}
+			<input disabled maxlength="3" size="1" value="160" id="counter" class="counter inline">
+			<input class="submit inline postit" type="submit" value="">
 		</div>
-	</div>
-	</div>
-
-	<div align="center" class="body">
-		<div class="heading-wrapper">
-			<h3 class="calligraphy small">Posts Feed</h3>
-		</div>
-	</div>
-
-	{% for error in errors %}
-	<div align="center" class="error-wrapper">
-		<span class="error">{{ error }}</span>
-	</div>
-	{% endfor %}
-
-
-	<div class="content">
-		<div class="new-post">
-			<form action="/socialnetwork/add-post" method="post">
-				<div class="add-post-form">
-					<table>{{form}}
-					</table>
-					{% csrf_token %}
-					<!-- 				<label>Post Content:</label> -->
-					<!-- 				<textarea onkeyup="textCounter(this,'counter',160);" -->
-					<!-- 					name="postcontent" rows="4" cols="100"></textarea> -->
-					<input disabled maxlength="3" size="1" value="160" id="counter"
-						class="counter inline">
-					<input class="submit inline postit" type="submit" value="">
-				</div>
-			</form>
-		</div>
-		<div id="posts-wrapper" class="posts">
-			<div id="posts-list" class="history">
-				{% if not posts %}
-				<div align="center">
-					<span>No posts</span>
-				</div>
-				{% endif %} {% for post in posts %}
-				<div class="wrapper">
-					<div class="post-wrapper top">
-						<img class="icon post-user inline"
-							src="{{STATIC_URL}}socialnetwork/images/user_post.png">
-						<a class="post-user link"
-							href="/socialnetwork/profile/{{post.user.id}}">{{post.user.username}}</a>
-						{% if post.user == user %}
-						<a class="delete-action"
-							href="/socialnetwork/delete-post/{{post.id}}/profile">
-							<img class="delete"
-								src="{{STATIC_URL}}socialnetwork/images/post_delete.png">
-						</a>
-						{% endif %}
-						<div class="post-content">
-							<span>{{post}}</span>
-						</div>
-					</div>
-					<div class="post-wrapper bottom">
-						<span class="post-date">{{post.creation_date}}</span>
-					</div>
-				</div>
-				{% endfor %}
+	</form>
+</div>
+<div class="centered">
+	<div id="posts-wrapper" class="posts column">
+		<div id="posts-list" class="history">
+			{% if not posts %}
+			<div align="center">
+				<span>No posts</span>
 			</div>
+			{% endif %} 
+			{% for post in posts %}
+			<div class="wrapper">
+				<div class="post-wrapper top">
+					<img class="icon post-user inline" src="{% static 'socialnetwork/images/user_post.png' %}">
+					<a class="post-user link" href="{% url 'profile' post.user.id %}">{{post.user.username}}</a>
+					{% if post.user == user %}
+					<a class="delete-action" href="{% url 'delete' post.id 'home' %}">
+						<img class="delete" src="{% static 'socialnetwork/images/post_delete.png' %}">
+					</a>
+					{% endif %}
+					<div class="post-content">
+						<span>{{post}}</span>
+					</div>
+				</div>
+				<div class="post-wrapper bottom">
+					{% if post.user != user %}
+						{% if following %}
+							<a class="link following fleft" onclick="return toggleFollow(this);" href="{% url 'follow' post.user.id %}">Following</a>
+						{% else %}
+							<a class="link following fleft" onclick="return toggleFollow(this);" href="{% url 'follow' post.user.id %}">Follow Me!</a>
+						{% endif %}
+					{% endif %}
+					<span class="post-date">{{post.creation_date}}</span>
+				</div>
+			</div>
+			{% endfor %}
 		</div>
 	</div>
+</div>
 
-	<script>
-		$(function() {
-// 			$("#id_counter").prop('disabled', true);
-// 			$("#id_counter").prop('value', 160);
-// 			$("#id_counter").addClass("counter");
-// 			$("#id_counter").addClass("inline");
+<script>
+	$(function() {
 
-			$( "#id_post_content" ).keyup(function() {
-				textCounter($(this), 'counter', 160);
-				return false;
-			});
+		$("#id_post_content").keyup(function() {
+
+			textCounter($(this), 'counter', 160);
+			return false;
 		});
+	});
 
-		function textCounter(element, field2, maxlimit) {
-			var countfield = document.getElementById(field2);
-			var value = $(element).val();
-			if (value.length > maxlimit) {
-				$(element).val(value.substring(0, maxlimit));
-				countfield.style.color = "red";
-				return false;
-			} else {
-				countfield.value = maxlimit - $(element).val().length;
-			}
+	function textCounter(element, field2, maxlimit) {
+
+		var countfield = document.getElementById(field2);
+		var value = $(element).val();
+		if (value.length > maxlimit) {
+			$(element).val(value.substring(0, maxlimit));
+			countfield.style.color = "red";
+			return false;
 		}
-	</script>
-</body>
-</html>
-
+		else {
+			countfield.value = maxlimit - $(element).val().length;
+		}
+	}
+	
+	function toggleFollow(element) {
+		var text = $(element).text();
+		var href = $(element).attr('href');
+		var params;
+		if (text == "Follow Me!") {
+			params = '?follow=follow';
+			text = "Following";
+		} else if (text == "Following") {
+			params = '?follow=unfollow';
+			text = "Follow Me!";
+		}
+		
+		$.get(href + params, function(data) {
+			$(element).text(text);
+		});
+		
+		return false;
+	}
+</script>
+{% endblock %}
 

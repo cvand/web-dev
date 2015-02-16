@@ -22,7 +22,7 @@ SECRET_KEY = '0acbdb(^k-64=rgec1wt6fo)t-c98z3c@qcz+i!y^vltn(p-9$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -89,3 +89,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = '/uploads/'

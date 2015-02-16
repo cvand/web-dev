@@ -1,55 +1,26 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Social Network -- Login</title>
+{% extends "socialnetwork/header.html" %} 
 
-<link rel="stylesheet" href="{{ STATIC_URL }}socialnetwork/css/main.css" />
-<link rel="stylesheet"
-	href="{{ STATIC_URL }}socialnetwork/css/forms.css" />
-</head>
+{% block heading %}
+<h3 class="calligraphy">Welcome!</h3>
+<span class="heading">Please sign in below</span>
+{% endblock %}
 
-<body>
-	<div class="header">
-		<a href="/socialnetwork/" class="sonet">SoNet</a>
-	</div>
-	<div align="center" class="body">
-		<div class="heading-wrapper">
-			<h3 class="calligraphy">Welcome!</h3>
-			<span class="heading">Please sign in below</span>
+{% block content %}
+<div class="login">
+	<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+		<div class="form">
+			<table>
+				{{ form }}
+			</table>
+			<div align="center">
+				<span class="label inline">Not already a user? </span>
+				<a class="register link" href="/socialnetwork/register">Register</a>
+			</div>
+			<input class="submit" type="submit" value="Login" />
+			<input type="hidden" name="next" value="{{ next }}" />
 		</div>
 
-		{% if form.errors %}
-		<div align="center" class="error-wrapper">
-			<p class="error">Incorrect user name or password.</p>
-		</div>
-		{% endif %}
-
-		<div class="login">
-			<form method="post"
-				action="{% url 'django.contrib.auth.views.login' %}">
-				<div class="form">
-					<table>
-						<tr>
-							<td class="label">{{ form.username.label_tag }}</td>
-							<td class="input">{{ form.username }}</td>
-						</tr>
-						<tr>
-							<td class="label">{{ form.password.label_tag }}</td>
-							<td class="input">{{ form.password }}</td>
-						</tr>
-					</table>
-					<span class="label inline">Not already a user?  </span>
-					<a class="register link" href="/socialnetwork/register">Register</a>
-					<input class="submit" type="submit" value="Login" />
-					<input type="hidden" name="next" value="{{ next }}" />
-				</div>
-
-				{% csrf_token %}
-			</form>
-		</div>
-	</div>
-
-</body>
-</html>
-
+		{% csrf_token %}
+	</form>
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 form tr {
 	line-height: 40px;
-	text-align: left;
+	vertical-align: top;
 }
 
 .login, .register {
@@ -26,11 +26,12 @@ form tr {
 	margin-right: 20px;
 }
 
-.form input, input {
+.form input, input, textarea {
 	background: none repeat scroll 0 0 #f6f6f6;
 	border-radius: 5px;
 	border-style: none;
 	font-size: 1em;
+	padding-left: 5px;
 }
 
 .register.link {
@@ -55,6 +56,12 @@ form tr {
 
 .new-post table {
 	display: inline;
+}
+
+input:disabled {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+	border: medium none;
+	color: #d6d6d6;
 }
 
 form .counter {
@@ -92,4 +99,35 @@ textarea {
 
 .add-post-form {
 	vertical-align: middle;
+}
+
+input[type="file"] {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+	padding: 0;
+	width: 250px;
+}
+
+input[type="number"]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button
+	{
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+
+.action {
+	margin: 0 5px;
+	cursor: pointer;
+}
+
+textarea:disabled {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+	border: medium none;
+	color: #d6d6d6;
+}
+
+label[for="id_short_bio"] {
+	margin-top: 5px;
 }
