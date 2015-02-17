@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.db import transaction
 from django.core.exceptions import ValidationError
+import re
 
 from socialnetwork.models import *
 from socialnetwork.forms import RegistrationForm, PostForm, EditUserForm, EditInfoForm
@@ -21,9 +22,8 @@ def home(request):
     for f in following:
         following_users.append(f.user)
     
-    
     posts = Post.objects.all().order_by('-creation_date')
-    return render(request, 'socialnetwork/home.html', {'posts' : posts, 'form' : PostForm(), 'following' : following_users})
+    return render(request, 'socialnetwork/home.html', {'posts' : posts, 'form' : PostForm(), 'following' : following_users, 'user' : user})
 
 @login_required
 def profile(request, id):
@@ -137,7 +137,7 @@ def edit_profile(request):
         user.save()
         
         old_user_info = UserInfo.objects.filter(user=user)
-        if old_user_info:
+        if old_user_info and old_user_info[0].image:
 #             old_user_info[0].image.delete()
             old_user_info[0].delete()
         
@@ -151,9 +151,11 @@ def edit_profile(request):
 
 @login_required
 def stream(request):
-    user = request.user
     posts = []
+
+    user = request.user
     following = UserInfo.objects.filter(user=user)[0].following.all()
+    
     following_users = []
     for f in following:
         following_users.append(f.user)
@@ -162,7 +164,7 @@ def stream(request):
         user_posts = Post.objects.filter(user=follow_user.user)
         posts.extend(user_posts)
     
-    posts.sort(reverse=True)
+    posts.sort(key=lambda post: post.creation_date, reverse=True)
     return render(request, 'socialnetwork/stream.html', {'posts' : posts, 'user' : user, 'following' : following_users})
 
 @login_required
@@ -208,30 +210,25 @@ def follow(request, user_id):
 
 @login_required
 @transaction.atomic
-def delete_post(request, post_id, pageref):
+def delete_post(request, post_id):
     errors = []
     
-    # Deletes post if the logged-in user has an post matching the id
+    referer = get_referer_view(request, None)
+    
     try:
         post_to_delete = Post.objects.get(id=post_id, user=request.user)
         post_to_delete.delete()
     except get_object_or_404:
         errors.append('This post either does not exist or is owned by another user.')
     
-    posts = Post.objects.all().order_by('-creation_date')
-    userinfo = UserInfo.objects.filter(user=request.user)[0]
-    following = userinfo.following.all()
-    following_users = []
-    for f in following:
-        following_users.append(f.user)
-    url = 'socialnetwork/home.html'
+    if 'stream' in referer:
+        url = 'follower-stream'
+    elif 'profile' in referer:
+        url = 'profile'
+    else:
+        url = 'home'
     
-    if (pageref == 'profile'):
-        posts = Post.objects.filter(user=request.user).order_by('-creation_date')
-        url = 'socialnetwork/profile.html'
-
-    context = {'posts' : posts, 'errors' : errors, 'following' : following_users}
-    return render(request, url, context)
+    return redirect(reverse(url))
 
 
 @transaction.atomic
@@ -291,3 +288,17 @@ def get_photo(request, id):
     if not userinfo.image:
         raise Http404
     return HttpResponse(userinfo.image, content_type=userinfo.content_type)
+
+def get_referer_view(request, default=None):
+    # if the user typed the url directly in the browser's address bar
+    referer = request.META.get('HTTP_REFERER')
+    server_name = request.META.get('SERVER_NAME')
+    if not referer:
+        return default
+
+    # remove the protocol and split the url at the slashes
+    referer = re.sub('^https?:\/\/', '', referer).split('/')
+
+    # add the slash at the relative path's view and finished
+    referer = u'/' + u'/'.join(referer[1:])
+    return referer

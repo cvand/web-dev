@@ -6,58 +6,7 @@
 
 {% block content %}
 <div class="centered">
-	<div id="posts-wrapper" class="posts column">
-		<div id="posts-list" class="history">
-			{% if not posts %}
-			<div align="center">
-				<span>No posts</span>
-			</div>
-			{% endif %} 
-			{% for post in posts %}
-			<div class="wrapper">
-				<div class="post-wrapper top">
-					{% if post.user.userinfo.image %} 
-						<img class="icon post-user inline" src="{% url 'image' post.user.id %}" alt="{{user.username}}">
-					{% else %} 
-						<img class="icon post-user inline" src="{% static 'socialnetwork/images/user_post.png' %}" alt="{{user.username}}">
-					{% endif %}
-					<a class="post-user link" href="{% url 'profile' post.user.id %}">{{post.user.username}}</a>
-					{% if post.user == user %}
-					<a class="delete-action" href="{% url 'delete' post.id 'home' %}">
-						<img class="delete" src="{% static 'socialnetwork/images/post_delete.png' %}">
-					</a>
-					{% endif %}
-					<div class="post-content">
-						<span>{{post}}</span>
-					</div>
-				</div>
-				<div class="post-wrapper bottom">
-					<span class="post-date">{{post.creation_date}}</span>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
-	</div>
+	{% include "socialnetwork/posts.html" with posts=posts following=following user=user %}
 </div>
 
-<script>
-	function toggleFollow(element) {
-		var text = $(element).text();
-		var href = $(element).attr('href');
-		var params;
-		if (text == "Follow Me!") {
-			params = '?follow=follow';
-			text = "Following";
-		} else if (text == "Following") {
-			params = '?follow=unfollow';
-			text = "Follow Me!";
-		}
-		
-		$.get(href + params, function(data) {
-			$(element).text(text);
-		});
-		
-		return false;
-	}
-</script>
 {% endblock %}

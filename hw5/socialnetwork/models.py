@@ -21,7 +21,7 @@ class UserInfo(models.Model):
     user = models.OneToOneField(User, primary_key=True)
     age = models.IntegerField(blank=True, null=True)
     short_bio = models.TextField(max_length=430, blank=True)
-    image = models.ImageField(blank=True, upload_to='uploads/')
+    image = models.ImageField(blank=True, null=True, upload_to='uploads/')
     content_type = models.CharField(max_length=50)
     following = models.ManyToManyField("self")
     
