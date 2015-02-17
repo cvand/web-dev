@@ -75,6 +75,7 @@ class EditInfoForm(forms.ModelForm):
         exclude = (
             'user',
             'content_type',
+            'following',
         )
         widgets = {
           'short_bio': forms.Textarea(attrs={'rows':5, 'cols':20}),

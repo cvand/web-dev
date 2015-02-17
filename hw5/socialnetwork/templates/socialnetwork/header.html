@@ -12,9 +12,16 @@
 	{% if user.id %}
 	<div class="separator"></div>
 	<div class="navtab">
-		<a class="link" href="{% url 'follower-stream' user.id %}">
+		<a class="link" href="{% url 'follower-stream' %}">
 			<img class="round icon" src="{% static 'socialnetwork/images/stream.png' %}">
 			<span class="nav"> Followers Stream</span>
+		</a>
+	</div>
+	<div class="separator"></div>
+	<div class="navtab">
+		<a class="link" href="{% url 'profile' user.id %}">
+			<img class="icon" src="{% static 'socialnetwork/images/user_post.png' %}">
+			<span class="nav"> Profile</span>
 		</a>
 	</div>
 	<div class="separator"></div>

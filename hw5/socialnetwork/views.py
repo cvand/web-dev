@@ -14,8 +14,16 @@ from django.http.response import HttpResponse
 
 @login_required
 def home(request):
+    user = request.user
+    userinfo = UserInfo.objects.filter(user=user)[0]
+    following = userinfo.following.all()
+    following_users = []
+    for f in following:
+        following_users.append(f.user)
+    
+    
     posts = Post.objects.all().order_by('-creation_date')
-    return render(request, 'socialnetwork/home.html', {'posts' : posts, 'form' : PostForm()})
+    return render(request, 'socialnetwork/home.html', {'posts' : posts, 'form' : PostForm(), 'following' : following_users})
 
 @login_required
 def profile(request, id):
@@ -71,8 +79,6 @@ def add_post(request):
     new_post = Post(user=request.user, post_content=post_form.cleaned_data['post_content'])
     new_post.save()
 
-    posts = Post.objects.all().order_by('-creation_date')
-    context['posts'] = posts
     return redirect(reverse('home'))
     
 @login_required
@@ -133,36 +139,59 @@ def edit_profile(request):
 
 @login_required
 def stream(request):
+    user = request.user
     posts = []
+    following = UserInfo.objects.filter(user=user)[0].following.all()
+    following_users = []
+    for f in following:
+        following_users.append(f.user)
     
-    return render(request, 'socialnetwork/stream.html', {'posts' : posts, 'user' : request.user})
+    for follow_user in following:
+        user_posts = Post.objects.filter(user=follow_user.user)
+        posts.extend(user_posts)
+    
+    posts.sort(reverse=True)
+    return render(request, 'socialnetwork/stream.html', {'posts' : posts, 'user' : user, 'following' : following_users})
 
 @login_required
 def follow(request, user_id):
-    followFlag = True
-    if 'followFlag' not in request.GET:
-        followFlag = False
-        
-    action = request.GET['follow'];
-    follower = request.user.id
-    following = user_id
-    if action == u'follow':
-        #add to db
-        print 'follow'
-    elif action == u'unfollow':
-        #remove from db
-        print 'unfollow'
-        
-    # get from db if request.user follows user_id
-    # if it exists and followFlag is false then remove from db (= unfollow)
-    # if it does not exist and followFlag is true then add to db (= followFlag)
-    
-    if 'pageref' not in request.GET:
+    context = {}
+
+    if 'follow' not in request.GET:
         return redirect(reverse('home'))
-     
-    pageref = request.GET['pageref']
-    if (pageref == 'stream'):
-        return redirect(reverse('stream'))
+    
+    action = request.GET['follow'];
+    follower_id = request.user.id
+    following_id = user_id
+
+    user_follower = User.objects.filter(id=follower_id)
+    user_following = User.objects.filter(id=following_id)
+    
+    if (not user_follower) or (not user_following):
+        context['errors'] = 'Please select an existing user'
+        context['posts'] = Post.objects.all().order_by('-creation_date')
+        context['form'] = PostForm()
+        
+        userinfo = UserInfo.objects.filter(user=request.user)[0]
+        following = userinfo.following.all()
+        
+        following_users = []
+        for f in following:
+            following_users.append(f.user)
+        context['following'] = following_users
+        return render(request, 'socialnetwork/home.html', context)   
+        
+    userinfo_follower = UserInfo.objects.filter(user=user_follower)[0]
+    userinfo_following = UserInfo.objects.filter(user=user_following)[0]
+    
+    following_exists = UserInfo.objects.filter(following=userinfo_following)
+    if (action == u'follow') and (not following_exists):
+        userinfo_follower.following.add(userinfo_following)
+        userinfo_follower.save()
+    elif (action == u'unfollow') and (following_exists):
+        userinfo_follower.following.remove(userinfo_following)
+        userinfo_follower.save()
+        
     return HttpResponse();
 
 @login_required
@@ -178,13 +207,18 @@ def delete_post(request, post_id, pageref):
         errors.append('This post either does not exist or is owned by another user.')
     
     posts = Post.objects.all().order_by('-creation_date')
+    userinfo = UserInfo.objects.filter(user=request.user)[0]
+    following = userinfo.following.all()
+    following_users = []
+    for f in following:
+        following_users.append(f.user)
     url = 'socialnetwork/home.html'
     
     if (pageref == 'profile'):
         posts = Post.objects.filter(user=request.user).order_by('-creation_date')
         url = 'socialnetwork/profile.html'
 
-    context = {'posts' : posts, 'errors' : errors}
+    context = {'posts' : posts, 'errors' : errors, 'following' : following_users}
     return render(request, url, context)
 
 

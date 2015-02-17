@@ -1,21 +1,10 @@
 {% extends "socialnetwork/header.html" %} 
 {% load static %}
 {% block heading %}
-	<h3 class="calligraphy small">Posts Feed</h3>
+	<h3 class="calligraphy small">Followers Feed</h3>
 {% endblock %}
 
 {% block content %}
-<div class="new-post">
-	<form action="{% url 'add' %}" method="post">
-		<div class="add-post-form">
-			<table>{{form}}
-			</table>
-			{% csrf_token %}
-			<input disabled maxlength="3" size="1" value="160" id="counter" class="counter inline">
-			<input class="submit inline postit" type="submit" value="">
-		</div>
-	</form>
-</div>
 <div class="centered">
 	<div id="posts-wrapper" class="posts column">
 		<div id="posts-list" class="history">
@@ -55,29 +44,6 @@
 </div>
 
 <script>
-	$(function() {
-
-		$("#id_post_content").keyup(function() {
-
-			textCounter($(this), 'counter', 160);
-			return false;
-		});
-	});
-
-	function textCounter(element, field2, maxlimit) {
-
-		var countfield = document.getElementById(field2);
-		var value = $(element).val();
-		if (value.length > maxlimit) {
-			$(element).val(value.substring(0, maxlimit));
-			countfield.style.color = "red";
-			return false;
-		}
-		else {
-			countfield.value = maxlimit - $(element).val().length;
-		}
-	}
-	
 	function toggleFollow(element) {
 		var text = $(element).text();
 		var href = $(element).attr('href');
@@ -98,4 +64,3 @@
 	}
 </script>
 {% endblock %}
-

@@ -179,11 +179,12 @@ label {
 	width: -moz-fit-content;
 }
 
-.row > span {
-  font-size: 1.1em;
-  font-weight: bold;
+.row>span {
+	font-size: 1.1em;
+	font-weight: bold;
 }
 
 .user {
-  color: #f6f6f6;
+	color: #f6f6f6;
+	padding-right: 10px;
 }

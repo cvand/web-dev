@@ -17,12 +17,12 @@ class Post(models.Model):
       
 class UserInfo(models.Model):
     user = models.OneToOneField(User, primary_key=True)
-    image = models.ImageField(blank=True, upload_to='images/')
-    content_type = models.CharField(max_length=50)
     age = models.IntegerField(blank=True, null=True)
     short_bio = models.TextField(max_length=430, blank=True)
+    image = models.ImageField(blank=True, upload_to='images/')
+    content_type = models.CharField(max_length=50)
+    following = models.ManyToManyField("self")
     
-class Followers(models.Model):
-    following = models.ManyToManyField(User)
+# class Followers(models.Model):
     
 
