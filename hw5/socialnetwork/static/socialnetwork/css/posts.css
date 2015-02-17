@@ -41,6 +41,18 @@
 	margin: 37px 10px 5px 80px;
 }
 
+button.empty {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+	border: medium none;
+	cursor: pointer;
+	outline: medium none;
+	padding: 0;
+}
+
+.empty>img {
+	width: 40px;
+}
+
 .post-wrapper.bottom {
 	background-color: #aacacc;
 	border-radius: 0 0 4px 4px;
@@ -63,8 +75,8 @@
 }
 
 .following {
-  color: #464646;
-  font-weight: bold;
+	color: #464646;
+	font-weight: bold;
 }
 
 .follow img {

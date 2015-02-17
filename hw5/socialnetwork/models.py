@@ -23,7 +23,6 @@ class UserInfo(models.Model):
     short_bio = models.TextField(max_length=430, blank=True)
     image = models.ImageField(blank=True, null=True, upload_to='uploads/')
     content_type = models.CharField(max_length=50)
-    following = models.ManyToManyField("self")
     
 @receiver(post_delete, sender=UserInfo)
 def image_post_delete_handler(sender, **kwargs):
@@ -31,4 +30,7 @@ def image_post_delete_handler(sender, **kwargs):
     storage, path = UserInfo.image.storage, UserInfo.image.path
     storage.delete(path)
     
-
+class Followers(models.Model):
+    follower = models.ForeignKey(User)
+    following = models.ForeignKey(UserInfo)
+    

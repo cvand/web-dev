@@ -1,7 +1,9 @@
 {% extends "socialnetwork/base.html" %}
 {% load static %}
 {% block header %}
-<a href="/socialnetwork/" class="sonet">SoNet</a>
+<div class="logo inline">
+	<a href="/socialnetwork/" class="sonet">SoNet</a>
+</div>
 <div class="navbar fright">
 	<div class="navtab">
 		<a class="link" href="{% url 'home' %}">

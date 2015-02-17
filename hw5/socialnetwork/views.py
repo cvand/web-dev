@@ -16,11 +16,11 @@ from django.http.response import HttpResponse, Http404
 @login_required
 def home(request):
     user = request.user
-    userinfo = UserInfo.objects.filter(user=user)[0]
-    following = userinfo.following.all()
+    following = Followers.objects.filter(follower=user)
+    
     following_users = []
     for f in following:
-        following_users.append(f.user)
+        following_users.append(f.following)
     
     posts = Post.objects.all().order_by('-creation_date')
     return render(request, 'socialnetwork/home.html', {'posts' : posts, 'form' : PostForm(), 'following' : following_users, 'user' : user})
@@ -42,7 +42,7 @@ def profile(request, id):
     userInfo = UserInfo.objects.filter(user=user)[0]
     
     context['profile_user'] = user
-    following = UserInfo.objects.filter(user=logged_in_user,following=user.userinfo)
+    following = Followers.objects.filter(follower=logged_in_user, following=userInfo)
     if following:
         context["following"] = True
     
@@ -154,14 +154,15 @@ def stream(request):
     posts = []
 
     user = request.user
-    following = UserInfo.objects.filter(user=user)[0].following.all()
+    following = Followers.objects.filter(follower=user)
     
     following_users = []
     for f in following:
-        following_users.append(f.user)
+        following_users.append(f.following)
     
-    for follow_user in following:
-        user_posts = Post.objects.filter(user=follow_user.user)
+    for follow_user in following_users:
+        f_user = follow_user.user
+        user_posts = Post.objects.filter(user=f_user)
         posts.extend(user_posts)
     
     posts.sort(key=lambda post: post.creation_date, reverse=True)
@@ -186,47 +187,53 @@ def follow(request, user_id):
         context['posts'] = Post.objects.all().order_by('-creation_date')
         context['form'] = PostForm()
         
-        userinfo = UserInfo.objects.filter(user=request.user)[0]
-        following = userinfo.following.all()
+        following = Followers.objects.filter(follower=request.user)
         
         following_users = []
         for f in following:
-            following_users.append(f.user)
+            following_users.append(f.following)
         context['following'] = following_users
         return render(request, 'socialnetwork/home.html', context)   
-        
-    userinfo_follower = UserInfo.objects.filter(user=user_follower)[0]
+    
+    user_following = user_following[0]
+    user_follower = user_follower[0]
     userinfo_following = UserInfo.objects.filter(user=user_following)[0]
     
-    following_exists = UserInfo.objects.filter(user=user_follower, following=userinfo_following)
+    following_exists = Followers.objects.filter(follower=user_follower, following=userinfo_following)
     if (action == u'follow') and (not following_exists):
-        userinfo_follower.following.add(userinfo_following)
-        userinfo_follower.save()
+        new_following = Followers(follower=user_follower, following=userinfo_following)
+        new_following.save()
     elif (action == u'unfollow') and (following_exists):
-        userinfo_follower.following.remove(userinfo_following)
-        userinfo_follower.save()
+        following_exists[0].delete()
         
     return HttpResponse();
 
 @login_required
 @transaction.atomic
-def delete_post(request, post_id):
+def delete_post(request):
     errors = []
     
     referer = get_referer_view(request, None)
-    
-    try:
-        post_to_delete = Post.objects.get(id=post_id, user=request.user)
-        post_to_delete.delete()
-    except get_object_or_404:
-        errors.append('This post either does not exist or is owned by another user.')
-    
     if 'stream' in referer:
         url = 'follower-stream'
     elif 'profile' in referer:
         url = 'profile'
     else:
         url = 'home'
+        
+    if request.method == 'GET':
+        return redirect(reverse(url))
+    
+    post_id = request.POST['post_id']
+
+    if not post_id:
+        return redirect(reverse(url))
+    
+    try:
+        post_to_delete = Post.objects.get(id=post_id, user=request.user)
+        post_to_delete.delete()
+    except get_object_or_404:
+        errors.append('This post either does not exist or is owned by another user.')
     
     return redirect(reverse(url))
 

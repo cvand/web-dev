@@ -7,9 +7,9 @@
 {% block content %}
 <div class="info column">
 	{% if user.userinfo.image %} 
-		<img class="w100" src="{% url 'image' user.id %}" alt="{{user.username}}"> 
+		<img class="w100 round" src="{% url 'image' user.id %}" alt="{{user.username}}"> 
 	{% else %} 
-		<img class="w100"
+		<img class="w100 round"
 			src="{% static 'socialnetwork/images/user.png' %}" alt="User"> 
 	{% endif %}
 	{% if editable %}

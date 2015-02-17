@@ -16,9 +16,11 @@
 				{% endif %}
 				<a class="post-user link" href="{% url 'profile' post.user.id %}">{{post.user.username}}</a>
 				{% if post.user == user %}
-				<a class="delete-action" href="{% url 'delete' post.id %}">
-					<img class="delete" src="{% static 'socialnetwork/images/post_delete.png' %}">
-				</a>
+				<form class="delete fright" action="{% url 'delete' %}" method="post">
+					<input type="hidden" name="post_id" value="{{ post.id }}">
+					<button class="empty" type="submit" name="submit" value=" "><img src="{% static 'socialnetwork/images/post_delete.png' %}"></button>
+					{% csrf_token %}
+				</form>
 				{% endif %}
 				<div class="post-content">
 					<span>{{post}}</span>
@@ -26,7 +28,7 @@
 			</div>
 			<div class="post-wrapper bottom">
 				{% if post.user != user %}
-					{% if post.user in following %}
+					{% if post.user.userinfo in following %}
 						<a class="link following fleft" onclick="return toggleFollow(this);" href="{% url 'follow' post.user.id %}">Following</a>
 					{% else %}
 						<a class="link following fleft" onclick="return toggleFollow(this);" href="{% url 'follow' post.user.id %}">Follow Me!</a>

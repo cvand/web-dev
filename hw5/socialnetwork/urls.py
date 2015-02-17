@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     url(r'^follower-stream$', 'socialnetwork.views.stream', name='follower-stream'),
     
     url(r'^add-post', 'socialnetwork.views.add_post', name='add'),
-    url(r'^delete-post/(?P<post_id>\d+)$', 'socialnetwork.views.delete_post', name='delete'),
+    url(r'^delete-post$', 'socialnetwork.views.delete_post', name='delete'),
 
     url(r'^follow/(?P<user_id>\d+)$', 'socialnetwork.views.follow', name='follow'),
      url(r'^image/(?P<id>\d+)$', 'socialnetwork.views.get_photo', name='image'),
