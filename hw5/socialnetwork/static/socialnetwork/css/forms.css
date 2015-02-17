@@ -131,3 +131,21 @@ textarea:disabled {
 label[for="id_short_bio"] {
 	margin-top: 5px;
 }
+
+.add-post-form th {
+	vertical-align: middle;
+}
+
+#user-edit td {
+	font-family: serif;
+	font-weight: bold;
+}
+
+#user-edit a {
+	color: #d6d6d6;
+	text-decoration: none;
+}
+
+label[for="image-clear_id"] {
+	min-width: 0;
+}

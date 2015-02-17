@@ -27,7 +27,11 @@
 			{% for post in posts %}
 			<div class="wrapper">
 				<div class="post-wrapper top">
-					<img class="icon post-user inline" src="{% static 'socialnetwork/images/user_post.png' %}">
+					{% if post.user.userinfo.image %} 
+						<img class="icon post-user inline" src="{% url 'image' post.user.id %}" alt="{{user.username}}">
+					{% else %} 
+						<img class="icon post-user inline" src="{% static 'socialnetwork/images/user.png' %}" alt="{{user.username}}">
+					{% endif %}
 					<a class="post-user link" href="{% url 'profile' post.user.id %}">{{post.user.username}}</a>
 					{% if post.user == user %}
 					<a class="delete-action" href="{% url 'delete' post.id 'home' %}">
@@ -39,13 +43,6 @@
 					</div>
 				</div>
 				<div class="post-wrapper bottom">
-					{% if post.user != user %}
-						{% if post.user in following %}
-							<a class="link following fleft" onclick="return toggleFollow(this);" href="{% url 'follow' post.user.id %}">Following</a>
-						{% else %}
-							<a class="link following fleft" onclick="return toggleFollow(this);" href="{% url 'follow' post.user.id %}">Follow Me!</a>
-						{% endif %}
-					{% endif %}
 					<span class="post-date">{{post.creation_date}}</span>
 				</div>
 			</div>

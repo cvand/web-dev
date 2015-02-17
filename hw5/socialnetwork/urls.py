@@ -18,4 +18,5 @@ urlpatterns = patterns('',
     url(r'^delete-post/(?P<post_id>\d+)/(?P<pageref>\w+)$', 'socialnetwork.views.delete_post', name='delete'),
 
     url(r'^follow/(?P<user_id>\d+)$', 'socialnetwork.views.follow', name='follow'),
+     url(r'^image/(?P<id>\d+)$', 'socialnetwork.views.get_photo', name='image'),
 )

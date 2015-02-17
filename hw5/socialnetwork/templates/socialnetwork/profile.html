@@ -6,8 +6,8 @@
 
 {% block content %}
 <div class="info column">
-	{% if userinfo.image %} 
-		<img class="w100" src="{% static 'socialnetwork/images/' userinfo.image %}" alt="{{user.username}}"> 
+	{% if user.userinfo.image %} 
+		<img class="w100" src="{% url 'image' user.id %}" alt="{{user.username}}"> 
 	{% else %} 
 		<img class="w100"
 			src="{% static 'socialnetwork/images/user.png' %}" alt="User"> 
@@ -26,34 +26,38 @@
 			<label>Username:</label>
 			<span>{{user.username}}</span>
 		</div>
-		<form id="user-edit" action="{% url 'edit-profile' %}" method="post">
+		<form id="user-edit" action="{% url 'edit-profile' %}" method="post" enctype="multipart/form-data">
 			<table>{{user_form}}{{edit_form}}
 			</table>
 			{% csrf_token %}
 		</form>
 	{% else %}
-	<a class="link follow fright" onclick="return toggleFollow(this);" href="{% url 'follow' user.id %}">Following</a>
-	<div class="row">
-		<label>First name:</label>
-		<span>{{user.first_name}}</span>
-	</div>
-	<div class="row">
-		<label>Last name:</label>
-		<span>{{user.last_name}}</span>
-	</div>
-	<div class="row">
-		<label>Age:</label>
-		<span>{{userinfo.age}}</span>
-	</div>
-	<div class="row">
-		<label>Username:</label>
-		<span>{{user.username}}</span>
-	</div>
-	<div class="row">
-		<label>Short bio:</label>
-		<span>{{userinfo.short_bio}}</span>
-	</div>
-{% endif %}
+		{% if following %}
+			<a class="link follow fright" onclick="return toggleFollow(this);" href="{% url 'follow' profile_user.id %}">Following</a>
+		{% else %}
+			<a class="link follow fright" onclick="return toggleFollow(this);" href="{% url 'follow' profile_user.id %}">Follow Me!</a>
+		{% endif %}
+		<div class="row">
+			<label>First name:</label>
+			<span>{{user.first_name}}</span>
+		</div>
+		<div class="row">
+			<label>Last name:</label>
+			<span>{{user.last_name}}</span>
+		</div>
+		<div class="row">
+			<label>Age:</label>
+			<span>{{userinfo.age}}</span>
+		</div>
+		<div class="row">
+			<label>Username:</label>
+			<span>{{user.username}}</span>
+		</div>
+		<div class="row">
+			<label>Short bio:</label>
+			<span>{{userinfo.short_bio}}</span>
+		</div>
+	{% endif %}
 </div>
 <div id="posts-wrapper" class="posts column">
 	<div id="posts-list" class="history">
@@ -65,7 +69,11 @@
 		{% for post in posts %}
 		<div class="wrapper">
 			<div class="post-wrapper top">
-				<img class="icon post-user inline" src="{% static 'socialnetwork/images/user_post.png' %}">
+				{% if post.user.userinfo.image %} 
+					<img class="icon post-user inline" src="{% url 'image' post.user.id %}" alt="{{user.username}}">
+				{% else %} 
+					<img class="icon post-user inline" src="{% static 'socialnetwork/images/user.png' %}" alt="{{user.username}}">
+				{% endif %}
 				<a class="post-user link" href="{% url 'profile' post.user.id %}">{{post.user.username}}</a>
 				{% if post.user == user %}
 				<a class="delete-action" href="{% url 'delete' post.id 'profile' %}">

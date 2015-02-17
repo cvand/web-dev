@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from socialnetwork.models import *
 from socialnetwork.forms import RegistrationForm, PostForm, EditUserForm, EditInfoForm
 from django.core.context_processors import request
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, Http404
 # from socialnetwork.forms import RegistrationForm, PostForm, EditForm
 
 @login_required
@@ -28,10 +28,11 @@ def home(request):
 @login_required
 def profile(request, id):
     context = {}
-    context['user'] = request.user
+    logged_in_user = request.user
+    context['user'] = logged_in_user
     user = User.objects.filter(id=id)
     context['editable'] = False;
-     
+    
     if not user:
         posts = Post.objects.all().order_by('-creation_date')
         context['posts'] = posts
@@ -39,7 +40,12 @@ def profile(request, id):
      
     user = user[0]
     userInfo = UserInfo.objects.filter(user=user)[0]
-     
+    
+    context['profile_user'] = user
+    following = UserInfo.objects.filter(user=logged_in_user,following=user.userinfo)
+    if following:
+        context["following"] = True
+    
     posts = Post.objects.filter(user=user).order_by('-creation_date')
     context['posts'] = posts
      
@@ -91,7 +97,8 @@ def edit_profile(request):
     if request.method == 'GET':
         return redirect(reverse('profile', kwargs={'id':request.user.id}))
     
-    userinfo_form = EditInfoForm(request.POST)
+    user_info = UserInfo()
+    userinfo_form = EditInfoForm(request.POST, request.FILES, instance=user_info)
     user_form = EditUserForm(request.POST)
  
     # Validates the form.
@@ -128,12 +135,17 @@ def edit_profile(request):
         user.first_name=user_form.cleaned_data['first_name']
         user.last_name=user_form.cleaned_data['last_name']
         user.save()
-         
-        userinfo = UserInfo.objects.filter(user=user)[0]
-        userinfo.age = userinfo_form.cleaned_data['age']
-        userinfo.short_bio = userinfo_form.cleaned_data['short_bio']
-        userinfo.image = userinfo_form.cleaned_data['image']
-        userinfo.save()
+        
+        old_user_info = UserInfo.objects.filter(user=user)
+        if old_user_info:
+#             old_user_info[0].image.delete()
+            old_user_info[0].delete()
+        
+        user_info.user = user 
+        if userinfo_form.cleaned_data['image']:
+            user_info.content_type = userinfo_form.cleaned_data['image'].content_type
+        user_info.save()
+        
 
     return redirect(reverse('profile', kwargs={'id':request.user.id}))
 
@@ -184,7 +196,7 @@ def follow(request, user_id):
     userinfo_follower = UserInfo.objects.filter(user=user_follower)[0]
     userinfo_following = UserInfo.objects.filter(user=user_following)[0]
     
-    following_exists = UserInfo.objects.filter(following=userinfo_following)
+    following_exists = UserInfo.objects.filter(user=user_follower, following=userinfo_following)
     if (action == u'follow') and (not following_exists):
         userinfo_follower.following.add(userinfo_following)
         userinfo_follower.save()
@@ -263,10 +275,6 @@ def register(request):
     new_user.save()
 
     new_user_info.user=new_user
-    if (userinfo_form.cleaned_data['age']):
-        new_user_info.age = userinfo_form.cleaned_data['age']
-    if userinfo_form.cleaned_data['short_bio']:
-        new_user_info.short_bio=userinfo_form.cleaned_data['short_bio']
     if userinfo_form.cleaned_data['image']:
         new_user_info.content_type = userinfo_form.cleaned_data['image'].content_type
     
@@ -277,3 +285,9 @@ def register(request):
     login(request, new_user)
     return redirect(reverse('home'))
 
+def get_photo(request, id):
+    user = User.objects.filter(id=id)
+    userinfo = get_object_or_404(UserInfo, user=user)
+    if not userinfo.image:
+        raise Http404
+    return HttpResponse(userinfo.image, content_type=userinfo.content_type)

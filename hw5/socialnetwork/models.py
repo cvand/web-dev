@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import datetime
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 # User class for built-in authentication module
 from django.contrib.auth.models import User
@@ -19,10 +21,14 @@ class UserInfo(models.Model):
     user = models.OneToOneField(User, primary_key=True)
     age = models.IntegerField(blank=True, null=True)
     short_bio = models.TextField(max_length=430, blank=True)
-    image = models.ImageField(blank=True, upload_to='images/')
+    image = models.ImageField(blank=True, upload_to='uploads/')
     content_type = models.CharField(max_length=50)
     following = models.ManyToManyField("self")
     
-# class Followers(models.Model):
+@receiver(post_delete, sender=UserInfo)
+def image_post_delete_handler(sender, **kwargs):
+    UserInfo = kwargs['instance']
+    storage, path = UserInfo.image.storage, UserInfo.image.path
+    storage.delete(path)
     
 
