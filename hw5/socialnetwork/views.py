@@ -29,8 +29,8 @@ def home(request):
 def profile(request, id):
     context = {}
     logged_in_user = request.user
-    context['user'] = logged_in_user
-    user = User.objects.filter(id=id)
+    user = User.objects.get(id=id)
+    context['user'] = user
     context['editable'] = False;
     
     if not user:
@@ -38,8 +38,7 @@ def profile(request, id):
         context['posts'] = posts
         return redirect(reverse('home'))
      
-    user = user[0]
-    userInfo = UserInfo.objects.filter(user=user)[0]
+    userInfo = UserInfo.objects.get(user=user)
     
     context['profile_user'] = user
     following = Followers.objects.filter(follower=logged_in_user, following=userInfo)
@@ -125,10 +124,9 @@ def edit_profile(request):
         return render(request, 'socialnetwork/profile.html', context)
              
      
-    user_obj = User.objects.filter(id=request.user.id)
+    user = User.objects.get(id=request.user.id)
      
-    if user_obj:
-        user = user_obj[0]
+    if user:
         if (user_form.cleaned_data['changed_password']):
             user.set_password(user_form.cleaned_data['password1'])
             
@@ -136,10 +134,9 @@ def edit_profile(request):
         user.last_name=user_form.cleaned_data['last_name']
         user.save()
         
-        old_user_info = UserInfo.objects.filter(user=user)
-        if old_user_info and old_user_info[0].image:
-#             old_user_info[0].image.delete()
-            old_user_info[0].delete()
+        old_user_info = UserInfo.objects.get(user=user)
+        if old_user_info and old_user_info.image:
+            old_user_info.delete()
         
         user_info.user = user 
         if userinfo_form.cleaned_data['image']:
@@ -179,8 +176,8 @@ def follow(request, user_id):
     follower_id = request.user.id
     following_id = user_id
 
-    user_follower = User.objects.filter(id=follower_id)
-    user_following = User.objects.filter(id=following_id)
+    user_follower = User.objects.get(id=follower_id)
+    user_following = User.objects.get(id=following_id)
     
     if (not user_follower) or (not user_following):
         context['errors'] = 'Please select an existing user'
@@ -195,16 +192,14 @@ def follow(request, user_id):
         context['following'] = following_users
         return render(request, 'socialnetwork/home.html', context)   
     
-    user_following = user_following[0]
-    user_follower = user_follower[0]
-    userinfo_following = UserInfo.objects.filter(user=user_following)[0]
+    userinfo_following = UserInfo.objects.get(user=user_following)
     
     following_exists = Followers.objects.filter(follower=user_follower, following=userinfo_following)
     if (action == u'follow') and (not following_exists):
         new_following = Followers(follower=user_follower, following=userinfo_following)
         new_following.save()
     elif (action == u'unfollow') and (following_exists):
-        following_exists[0].delete()
+        following_exists.delete()
         
     return HttpResponse();
 
@@ -212,22 +207,25 @@ def follow(request, user_id):
 @transaction.atomic
 def delete_post(request):
     errors = []
+    kwargs = {}
     
     referer = get_referer_view(request, None)
     if 'stream' in referer:
         url = 'follower-stream'
+        kwargs = {'id': request.user.id}
     elif 'profile' in referer:
         url = 'profile'
+        kwargs = {'id': request.user.id}
     else:
         url = 'home'
         
     if request.method == 'GET':
-        return redirect(reverse(url))
+        return redirect(reverse(url, kwargs = kwargs))
     
     post_id = request.POST['post_id']
 
     if not post_id:
-        return redirect(reverse(url))
+        return redirect(reverse(url, kwargs = kwargs))
     
     try:
         post_to_delete = Post.objects.get(id=post_id, user=request.user)
@@ -235,7 +233,7 @@ def delete_post(request):
     except get_object_or_404:
         errors.append('This post either does not exist or is owned by another user.')
     
-    return redirect(reverse(url))
+    return redirect(reverse(url, kwargs = kwargs))
 
 
 @transaction.atomic
@@ -290,7 +288,7 @@ def register(request):
     return redirect(reverse('home'))
 
 def get_photo(request, id):
-    user = User.objects.filter(id=id)
+    user = User.objects.get(id=id)
     userinfo = get_object_or_404(UserInfo, user=user)
     if not userinfo.image:
         raise Http404

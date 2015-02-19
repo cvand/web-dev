@@ -11,10 +11,10 @@ urlpatterns = patterns('',
     url(r'^register$', 'socialnetwork.views.register', name='register'),
 
     url(r'^profile/(?P<id>\d+)$', 'socialnetwork.views.profile', name='profile'),
-    url(r'^edit-profile', 'socialnetwork.views.edit_profile', name='edit-profile'),
+    url(r'^edit-profile$', 'socialnetwork.views.edit_profile', name='edit-profile'),
     url(r'^follower-stream$', 'socialnetwork.views.stream', name='follower-stream'),
     
-    url(r'^add-post', 'socialnetwork.views.add_post', name='add'),
+    url(r'^add-post$', 'socialnetwork.views.add_post', name='add'),
     url(r'^delete-post$', 'socialnetwork.views.delete_post', name='delete'),
 
     url(r'^follow/(?P<user_id>\d+)$', 'socialnetwork.views.follow', name='follow'),
