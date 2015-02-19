@@ -1,0 +1,26 @@
+{% extends "socialnetwork/header.html" %} 
+
+{% block heading %}
+<h3 class="calligraphy">Welcome!</h3>
+<span class="heading">Please sign in below</span>
+{% endblock %}
+
+{% block content %}
+<div class="login">
+	<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+		<div class="form">
+			<table>
+				{{ form }}
+			</table>
+			<div align="center">
+				<span class="label inline">Not already a user? </span>
+				<a class="register link" href="/socialnetwork/register">Register</a>
+			</div>
+			<input class="submit" type="submit" value="Login" />
+			<input type="hidden" name="next" value="{{ next }}" />
+		</div>
+
+		{% csrf_token %}
+	</form>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "socialnetwork/header.html" %}
+{% load static %}
+{% block heading %}
+	<h3 class="calligraphy small">Profile</h3>
+{% endblock %}
+
+{% block content %}
+<div class="info column">
+	{% if user.userinfo.image %} 
+		<img class="w100 round" src="{% url 'image' user.id %}" alt="{{user.username}}"> 
+	{% else %} 
+		<img class="w100 round"
+			src="{% static 'socialnetwork/images/user.png' %}" alt="User"> 
+	{% endif %}
+	{% if editable %}
+		<a class="edit action fright" onclick="return toggleEdit(false);">
+			<img class="icon" src="{% static 'socialnetwork/images/edit.png' %}">
+		</a>
+		<a id="cancel" class="cancel action fright" onclick="return toggleEdit(true);">
+			<img class="icon" src="{% static 'socialnetwork/images/cancel.png' %}">
+		</a>
+		<a id="submit" class="action fright" onclick="return submit();">
+			<img class="icon" src="{% static 'socialnetwork/images/submit.png' %}">
+		</a>
+		<div class="row">
+			<label>Username:</label>
+			<span>{{user.username}}</span>
+		</div>
+		<form id="user-edit" action="{% url 'edit-profile' %}" method="post" enctype="multipart/form-data">
+			<table>{{user_form}}{{edit_form}}
+			</table>
+			{% csrf_token %}
+		</form>
+	{% else %}
+		{% if following %}
+			<a class="link follow fright" onclick="return toggleFollow(this);" href="{% url 'follow' profile_user.id %}">Following</a>
+		{% else %}
+			<a class="link follow fright" onclick="return toggleFollow(this);" href="{% url 'follow' profile_user.id %}">Follow Me!</a>
+		{% endif %}
+		<div class="row">
+			<label>First name:</label>
+			<span>{{user.first_name}}</span>
+		</div>
+		<div class="row">
+			<label>Last name:</label>
+			<span>{{user.last_name}}</span>
+		</div>
+		<div class="row">
+			<label>Age:</label>
+			<span>{{userinfo.age}}</span>
+		</div>
+		<div class="row">
+			<label>Username:</label>
+			<span>{{user.username}}</span>
+		</div>
+		<div class="row">
+			<label>Short bio:</label>
+			<span>{{userinfo.short_bio}}</span>
+		</div>
+	{% endif %}
+</div>
+{% include "socialnetwork/posts.html" with posts=posts following=following user=user %}
+
+<script>
+	$(function() {
+
+		toggleEdit(true);
+
+		$('#id_short_bio').prop('cols', 20);
+		$('#id_short_bio').width(190);
+	});
+
+	function toggleEdit(flag) {
+
+		var elements = $("form#user-edit :input");
+		elements.each(function(index, el) {
+
+			$(el).prop('disabled', flag);
+		});
+
+		var label = $('label[for="id_password2"]');
+		label.parent().parent().prop('hidden', flag);
+		label = $('label[for="id_password1"]');
+		label.parent().parent().prop('hidden', flag);
+
+		if (!flag) {
+			$('#submit').removeClass('hidden');
+			$('#cancel').removeClass('hidden');
+		}
+		else {
+			$('#submit').addClass('hidden');
+			$('#cancel').addClass('hidden');
+		}
+
+		return false;
+	}
+
+	function submit() {
+		document.getElementById("user-edit").submit();
+		return false;
+	}
+</script>
+{% endblock %}

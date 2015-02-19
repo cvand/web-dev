@@ -1,0 +1,16 @@
+.column {
+	display: inline-block;
+	margin: 0 15px;
+	min-width: 300px;
+	width: -moz-fit-content;
+	vertical-align: top;
+}
+
+.row {
+	margin: 7px 0;
+}
+
+.centered {
+  margin: auto;
+  width: -moz-fit-content;
+}

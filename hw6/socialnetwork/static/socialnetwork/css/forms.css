@@ -1,0 +1,151 @@
+form tr {
+	line-height: 40px;
+	vertical-align: top;
+}
+
+.login, .register {
+	width: -moz-fit-content;
+	margin: auto;
+}
+
+.form {
+	margin: 25px 0;
+	font-size: 1.1em;
+}
+
+.form tr {
+	height: 65px;
+}
+
+.form .label, .form label {
+	color: #dedede;
+	margin-right: 40px;
+}
+
+.form .label {
+	margin-right: 20px;
+}
+
+.form input, input, textarea {
+	background: none repeat scroll 0 0 #f6f6f6;
+	border-radius: 5px;
+	border-style: none;
+	font-size: 1em;
+	padding-left: 5px;
+}
+
+.register.link {
+	font-style: italic;
+	font-weight: bold;
+}
+
+.submit {
+	display: block;
+	margin: 25px auto auto;
+	padding: 10px 15px;
+	color: #464646;
+	font-size: 0.7em !important;
+}
+
+.new-post .submit {
+	margin-left: 10px;
+	margin-top: 50px;
+	padding: 20px;
+	vertical-align: top;
+}
+
+.new-post table {
+	display: inline;
+}
+
+input:disabled {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+	border: medium none;
+	color: #d6d6d6;
+}
+
+form .counter {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+	border: medium none;
+	color: #d6d6d6;
+	font-size: 0.75em;
+	margin-top: 65px;
+	vertical-align: top;
+}
+
+textarea {
+	border-radius: 15px;
+	font-size: 18px;
+	padding: 15px;
+	resize: none;
+	vertical-align: middle;
+	width: 360px;
+	font-family: "Georgia", Helvetica, serif;
+}
+
+.postit {
+	background: url("../images/mail.png") no-repeat scroll 0 0/45px auto
+		rgba(0, 0, 0, 0);
+	cursor: pointer;
+}
+
+.errorlist {
+	color: #f5785a;
+	float: right;
+	list-style-type: none;
+	margin: 0;
+	padding: 0 10px;
+}
+
+.add-post-form {
+	vertical-align: middle;
+}
+
+input[type="file"] {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+	padding: 0;
+	width: 250px;
+}
+
+input[type="number"]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button
+	{
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+
+.action {
+	margin: 0 5px;
+	cursor: pointer;
+}
+
+textarea:disabled {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+	border: medium none;
+	color: #d6d6d6;
+}
+
+label[for="id_short_bio"] {
+	margin-top: 5px;
+}
+
+.add-post-form th {
+	vertical-align: middle;
+}
+
+#user-edit td {
+	font-family: serif;
+	font-weight: bold;
+}
+
+#user-edit a {
+	color: #d6d6d6;
+	text-decoration: none;
+}
+
+label[for="image-clear_id"] {
+	min-width: 0;
+}

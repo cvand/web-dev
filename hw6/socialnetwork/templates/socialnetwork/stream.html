@@ -1,0 +1,12 @@
+{% extends "socialnetwork/header.html" %} 
+{% load static %}
+{% block heading %}
+	<h3 class="calligraphy small">Followers Feed</h3>
+{% endblock %}
+
+{% block content %}
+<div class="centered">
+	{% include "socialnetwork/posts.html" with posts=posts following=following user=user %}
+</div>
+
+{% endblock %}

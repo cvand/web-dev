@@ -1,0 +1,197 @@
+body {
+	background: none repeat scroll 0 0 #506987;
+	color: #d6d6d6;
+	font-size: 20px;
+	margin: 0;
+	min-width: 400px;
+}
+
+@font-face {
+	font-family: calligraphy-wolf;
+	src: url(../Wolf_in_the_City_Light.ttf);
+}
+
+@font-face {
+	font-family: calligraphy-brotherhood;
+	src: url(../Brotherhood_Script.ttf);
+}
+
+h3 {
+	margin: 0 15px;
+}
+
+label {
+	display: inline-block;
+	font-weight: bold;
+	margin-right: 15px;
+	max-width: 300px;
+	min-width: 100px;
+	text-align: right;
+}
+
+.body {
+	max-width: 1000px;
+	margin: auto;
+	padding: 10px 0;
+	text-align: center;
+}
+
+.header {
+	background: none repeat scroll 0 0 #aacacc;
+	margin: 10px 0 0;
+	min-height: 80px;
+	padding-right: 20px;
+	width: -moz-available;
+}
+
+.heading {
+	color: #dedede;
+	font-size: 25px;
+}
+
+.heading-wrapper {
+	margin: 0 0 10px;
+}
+
+.no-welcome {
+	padding-top: 110px;
+}
+
+.error {
+	color: #f5785a;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+.sonet {
+	color: #464646;
+	font-family: calligraphy-brotherhood;
+	font-size: 3em;
+	font-weight: bold;
+	margin: 0 10px;
+	text-decoration: none;
+	vertical-align: -moz-middle-with-baseline;
+}
+
+.logo {
+	display: inline-block;
+	line-height: 70px;
+}
+
+.calligraphy {
+	color: #dedede;
+	font-family: calligraphy-wolf;
+	font-size: 8em;
+}
+
+.small {
+	font-size: 4em;
+}
+
+.inline {
+	display: inline !important;
+}
+
+.block {
+	display: block;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.fleft {
+	float: left;
+}
+
+.fright {
+	float: right;
+}
+
+.w100 {
+	width: 100px;
+}
+
+.info {
+	background: none repeat scroll 0 0 #35586c;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+.content {
+	margin: auto;
+	width: -moz-fit-content;
+}
+
+.link {
+	color: #d6d6d6;
+	text-decoration: none;
+}
+
+.link:hover {
+	color: #A6A6A6
+}
+
+.navbar {
+	display: inline;
+	text-align: right;
+	margin-top: 10px
+}
+
+.navtab {
+	display: inline;
+	margin: 10px 3px 0;
+	padding: 0 7px 0 0;
+}
+
+.last {
+	border: none;
+}
+
+.icon {
+	width: 30px;
+}
+
+.round {
+	border-radius: 50%;
+}
+
+.separator {
+	border-right: medium solid;
+	display: inline-block;
+	height: 35px;
+	margin: 0 7px;
+	width: 1px;
+}
+
+.nav {
+	color: #464646;
+	vertical-align: super;
+}
+
+.logout.icon {
+	background: none repeat scroll 0 0 #f54d70;
+	border-radius: 30px;
+	padding: 5px;
+	width: 20px;
+}
+
+.new-post {
+	margin: auto auto 20px;
+	width: -moz-fit-content;
+}
+
+.history {
+	margin: auto;
+	width: -moz-fit-content;
+}
+
+.row>span {
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+.user {
+	color: #f6f6f6;
+	padding-right: 10px;
+}
