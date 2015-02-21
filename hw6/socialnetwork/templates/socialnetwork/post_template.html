@@ -1,0 +1,97 @@
+ {% load static %}
+ {% for post in posts %}
+<div class="wrapper">
+	<div class="post-wrapper top">
+		{% if post.user.userinfo.image %} 
+			<img class="icon post-user round inline" src="{% url 'image' post.user.id %}" alt="{{post.user.username}}"> 
+		{% else %} 
+			<img class="icon post-user round inline" src="{% static 'socialnetwork/images/user.png' %}" alt="{{post.user.username}}"> 
+		{% endif %} 
+		<a class="post-user link" href="{% url 'profile' post.user.id %}">{{post.user.username}}</a>
+		{% if post.user == user %}
+		<form class="delete fright" action="{% url 'delete' %}" method="post">
+			<input type="hidden" name="post_id" value="{{ post.id }}">
+			<button class="empty" type="submit" name="submit" value=" ">
+				<img src="{% static 'socialnetwork/images/post_delete.png' %}">
+			</button>
+			{% csrf_token %}
+		</form>
+		{% endif %}
+		<div class="post-content">
+			<span>{{post}}</span>
+		</div>
+	</div>
+	<div class="post-wrapper bottom">
+		{% if post.user != user %} 
+			{% if post.user.userinfo in following %} 
+				<a class="link following fleft" onclick="return toggleFollow(this);" href="{% url 'follow' post.user.id %}">Following</a> 
+			{% else %} 
+				<a class="link following fleft" onclick="return toggleFollow(this);" href="{% url 'follow' post.user.id %}">Follow Me!</a> 
+			{% endif %} 
+		{% endif %}
+		<span class="post-date">{{post.creation_date}}</span>
+	</div>
+	{% if comments %}
+	<div class="comments-wrapper" id="comments-wrapper">
+		{% include "socialnetwork/comment_template.html" with comments=post.comments.all post=post %}
+	</div>
+	{% endif %}
+	<div class="new-comment-wrapper">
+		<div class="new-comment">
+			{% if user.userinfo.image %} 
+				<img class="icon round inline" src="{% url 'image' user.id %}" alt="{{user.username}}"> 
+			{% else %} 
+				<img class="icon round inline" src="{% static 'socialnetwork/images/user.png' %}" alt="{{user.username}}"> 
+			{% endif %} 
+			<form action="{% url 'comment' %}" method="post" class="comment-form" id="add-comment">
+				<textarea name="comment" rows="1" cols="80" ></textarea>
+				<input type="hidden" name="post_id" value="{{ post.id }}">
+				{% csrf_token %}
+			</form>
+			<a class="submit inline comment" onclick="return add_comment();"></a>
+		</div>
+	</div>
+</div>
+{% endfor %}
+
+<script>
+	$(function() {
+// 		$('label[for="id_comment"]').each(function(index) {
+// 			$(this).addClass('hidden');
+// 		});
+// 		$('label[for="id_post_id"]').each(function(index) {
+// 			$(this).addClass('hidden');
+// 		});
+// 		$('input[name="post_id"]').each(function(index) {
+// 			$(this).addClass('hidden');
+// 		});
+	});
+
+	function add_comment() {
+		$("#add-comment").submit(function(e) {
+			    var postData = $(this).serializeArray();
+			    var formURL = $(this).attr("action");
+			    $.ajax({
+			        url : formURL,
+			        type: "POST",
+			        data : postData,
+			        success:function(data, textStatus, jqXHR) {
+			            var last_comment = $("#comments-wrapper").last();
+			            if (last_comment == null) {
+			            	$("#comments-wrapper").prepend(data);
+			            	return;
+			            }
+			            
+			            $(last_comment).append(data);
+			        },
+			        error: function(jqXHR, textStatus, errorThrown) {
+			        }
+			    });
+			});
+				 
+		$("#add-comment").submit();
+				
+		return false;
+	}
+
+</script>

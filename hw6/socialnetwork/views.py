@@ -2,13 +2,16 @@ import re
 
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
+import json
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http.response import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
 
-from socialnetwork.forms import RegistrationForm, PostForm, EditUserForm, EditInfoForm
+from socialnetwork.forms import *
 from socialnetwork.models import *
 
 
@@ -16,14 +19,16 @@ from socialnetwork.models import *
 @login_required
 def home(request):
     user = request.user
-    following = Followers.objects.filter(follower = user)
-
-    following_users = []
-    for f in following:
-        following_users.append(f.following)
-
+    following_users = get_followers(user)
+    now = datetime.now()
+    now.strftime('YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]')
+    
     posts = Post.objects.all().order_by('-creation_date')
-    return render(request, 'socialnetwork/home.html', {'posts' : posts, 'form' : PostForm(), 'following' : following_users, 'user' : user})
+#     comments = {}
+#     for post in posts:
+#         comments[post.id] = post.comments.all()
+    
+    return render(request, 'socialnetwork/home.html', {'posts' : posts, 'form' : PostForm(), 'following' : following_users, 'user' : user, 'timestamp' : str(now)})
 
 @login_required
 def profile(request, id):
@@ -32,14 +37,15 @@ def profile(request, id):
     context['user'] = logged_in_user
     user = User.objects.get(id = id)
     context['editable'] = False;
+    now = datetime.now()
+    now.strftime('YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]')
+    context['timestamp'] = str(now)
 
     if not user:
         posts = Post.objects.all().order_by('-creation_date')
         context['posts'] = posts
         return redirect(reverse('home'))
 
-#     user = user[0]
-#     userInfo = UserInfo.objects.filter(user=user)[0]
     userInfo = UserInfo.objects.get(user = user)
 
     context['profile_user'] = user
@@ -63,13 +69,16 @@ def profile(request, id):
                                 'password2': user.password,
                                 })
         context['user_form'] = user_form
-
     return render(request, 'socialnetwork/profile.html', context)
 
 @login_required
 @transaction.atomic
 def add_post(request):
     context = {}
+    now = datetime.now()
+    now.strftime('YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]')
+    
+    context['timestamp'] = str(now)
 
     # Just display the registration form if this is a GET request.
     if request.method == 'GET':
@@ -88,6 +97,78 @@ def add_post(request):
 
     return redirect(reverse('home'))
 
+@login_required
+@transaction.atomic
+def add_comment(request):
+    context = {}
+
+    if request.method == 'GET':
+        return HttpResponse("Invalid request (GET)")
+
+    post_id = request.POST['post_id']
+    if not post_id:
+        return HttpResponse("Invalid request: no reference to some post is given")
+    
+    comment = request.POST['comment']
+    if not comment:
+        return HttpResponse("Invalid request: no comment is given")
+    
+    post = Post.objects.get(id = post_id)
+    if not post:
+        return HttpResponse("Invalid request: you are trying to comment on a post that doen't exist")
+
+    new_comment = Comment()
+    new_comment.comment = comment
+    new_comment.save()
+    post.comments.add(new_comment)
+    post.save()
+    
+    context['comments'] = [new_comment]
+    context['post'] = post
+    
+    response_html = render_to_string('socialnetwork/comment_template.html', context)
+    
+    return HttpResponse(response_html, content_type = 'text/html')
+
+@login_required
+def get_posts(request):
+    if request.method == 'GET':
+        return Http404()
+    
+    context = {}
+    timestamp = request.POST['timestamp']
+    print timestamp
+    
+    if not timestamp:
+        response_text = Post.objects.all().order_by('-creation_date')
+    else:
+        timestamp = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f')
+        timestamp.strftime('YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]')
+        
+        posts = Post.objects.filter(creation_date__gte=timestamp).order_by('-creation_date')
+        response_text = posts
+    
+    context['posts'] = response_text
+    context['user'] = request.user
+    following_users = get_followers(request.user)
+    
+    context['following'] = following_users
+    
+    response_html = render_to_string('socialnetwork/post_template.html', context)
+    
+    response = json.dumps({'timestamp': str(timestamp),
+               'html': str(response_html)})
+    return HttpResponse(response, content_type = 'text/json')
+
+def get_followers(user):
+    following = Followers.objects.filter(follower = user)
+
+    following_users = []
+    for f in following:
+        following_users.append(f.following)
+    
+    return following_users
+    
 @login_required
 @transaction.atomic
 def edit_profile(request):
@@ -122,6 +203,10 @@ def edit_profile(request):
         context['editable'] = True
         posts = Post.objects.filter(user = request.user).order_by('-creation_date')
         context['posts'] = posts
+        now = datetime.now()
+        now.strftime('YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]')
+    
+        context['timestamp'] = str(now)
 
         return render(request, 'socialnetwork/profile.html', context)
 
@@ -153,11 +238,7 @@ def stream(request):
     posts = []
 
     user = request.user
-    following = Followers.objects.filter(follower = user)
-
-    following_users = []
-    for f in following:
-        following_users.append(f.following)
+    following_users = get_followers(user)
 
     for follow_user in following_users:
         f_user = follow_user.user
@@ -165,7 +246,10 @@ def stream(request):
         posts.extend(user_posts)
 
     posts.sort(key = lambda post: post.creation_date, reverse = True)
-    return render(request, 'socialnetwork/stream.html', {'posts' : posts, 'user' : user, 'following' : following_users})
+    
+    now = datetime.now()
+    now.strftime('YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]')
+    return render(request, 'socialnetwork/stream.html', {'posts' : posts, 'user' : user, 'following' : following_users, 'timestamp' : str(now)})
 
 @login_required
 def follow(request, user_id):
@@ -186,17 +270,13 @@ def follow(request, user_id):
         context['posts'] = Post.objects.all().order_by('-creation_date')
         context['form'] = PostForm()
 
-        following = Followers.objects.filter(follower = request.user)
-
-        following_users = []
-        for f in following:
-            following_users.append(f.following)
+        following_users = get_followers(request.user)
         context['following'] = following_users
         return render(request, 'socialnetwork/home.html', context)
 
     userinfo_following = UserInfo.objects.get(user = user_following)
 
-    following_exists = Followers.objects.get(follower = user_follower, following = userinfo_following)
+    following_exists = Followers.objects.filter(follower = user_follower, following = userinfo_following)
     if (action == u'follow') and (not following_exists):
         new_following = Followers(follower = user_follower, following = userinfo_following)
         new_following.save()

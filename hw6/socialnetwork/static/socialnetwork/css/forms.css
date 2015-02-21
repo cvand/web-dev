@@ -50,12 +50,12 @@ form tr {
 .new-post .submit {
 	margin-left: 10px;
 	margin-top: 50px;
-	padding: 20px;
+	padding: 25px;
 	vertical-align: top;
 }
 
 .new-post table {
-	display: inline;
+	display: inline-block;
 }
 
 input:disabled {
@@ -71,6 +71,7 @@ form .counter {
 	font-size: 0.75em;
 	margin-top: 65px;
 	vertical-align: top;
+	min-width: 30px;
 }
 
 textarea {
@@ -139,6 +140,9 @@ label[for="id_short_bio"] {
 #user-edit td {
 	font-family: serif;
 	font-weight: bold;
+	max-width: 235px;
+	overflow: auto;
+	white-space: nowrap;
 }
 
 #user-edit a {
@@ -148,4 +152,34 @@ label[for="id_short_bio"] {
 
 label[for="image-clear_id"] {
 	min-width: 0;
+}
+
+.register form {
+	text-align: left;
+}
+
+.comment {
+	background: url("../images/comment.png") no-repeat scroll 0 0/30px auto
+		rgba(0, 0, 0, 0);
+	cursor: pointer;
+	font-size: 0.6em;
+	margin: 10px 0 0 5px;
+	vertical-align: sub;
+}
+
+.comment-form {
+	display: inline-block;
+}
+
+#add-comment>textarea {
+	border-radius: 10px;
+	color: #464646;
+	font-size: 0.7em;
+	min-width: 399px;
+	padding: 5px;
+}
+
+.new-comment .icon {
+	margin: auto auto auto 10px;
+	vertical-align: middle;
 }

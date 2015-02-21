@@ -56,6 +56,7 @@ class PostForm(forms.ModelForm):
         exclude = (
             'created_date',
             'user',
+            'comments',
         )
         widgets = {
           'post_content': forms.Textarea(attrs={'rows':4, 'cols':50}),
@@ -151,3 +152,28 @@ class LoginForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(LoginForm, self).clean()
         return cleaned_data
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        exclude = (
+            'creation_date',
+        )
+        widgets = {
+          'comment': forms.Textarea(attrs={'rows':1, 'cols':80}),
+        }
+        
+    def clean(self):
+        cleaned_data = super(CommentForm, self).clean()
+        return cleaned_data
+    
+    def clean_comment(self):
+        comment = self.cleaned_data.get('comment')
+        if len(comment) > 160:
+            raise forms.ValidationError("The comment is too long.")
+        
+        if comment is ' ':
+            raise forms.ValidationError("The comment cannot be empty.")
+            
+        return comment

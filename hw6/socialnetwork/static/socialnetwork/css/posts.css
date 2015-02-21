@@ -4,12 +4,12 @@
 	max-width: 650px;
 }
 
-.post-wrapper {
+.post-wrapper, .comment-wrapper {
 	border-width: 1px;
 	position: relative;
 }
 
-.post-wrapper.top {
+.post-wrapper.top, .comment-wrapper.top, .new-comment {
 	border-style: solid;
 	background-color: #fff;
 	border-color: #ddd;
@@ -35,10 +35,11 @@
 	top: 8px;
 }
 
-.post-content {
+.post-content, .comment-content {
 	border-top: medium solid;
 	color: #666666;
 	margin: 37px 10px 5px 80px;
+	text-align: left;
 }
 
 button.empty {
@@ -55,7 +56,7 @@ button.empty {
 
 .post-wrapper.bottom {
 	background-color: #aacacc;
-	border-radius: 0 0 4px 4px;
+	/* 	border-radius: 0 0 4px 4px; */
 	border-width: 1px;
 	color: #595959;
 	font-size: 0.7em;
@@ -65,7 +66,7 @@ button.empty {
 
 .delete {
 	float: right;
-	margin: 15px 5px 10px 10px;
+	margin: 15px 5px 0 10px;
 	width: 40px;
 }
 
@@ -81,4 +82,57 @@ button.empty {
 
 .follow img {
 	width: 80px;
+}
+
+.new-comment {
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	background: none repeat scroll 0 0 #e4efef;
+	border-image: none;
+	border-left: medium none;
+	border-radius: 0 0 4px 4px;
+	border-right: medium none;
+	border-top: medium none;
+	padding: 10px 5px;
+}
+
+.comment-user {
+	margin: 5px 0 0 3px;
+}
+
+.comment-wrapper.top {
+	border-radius: 0;
+}
+
+.comment-content {
+	border: medium none;
+	display: inline-block;
+	margin: 10px 0;
+	vertical-align: top;
+}
+
+.comment-wrapper.top {
+	border-radius: 0;
+}
+
+.comment-content {
+	font-size: 0.8em;
+}
+
+.comment-wrapper.bottom {
+	background: none repeat scroll 0 0 #dbe3f6;
+	color: #464646;
+	font-size: 0.7em;
+	line-height: 20px;
+	text-align: right;
+}
+
+.comment-wrapper.bottom .post-date {
+	margin: 5px 10px;
+}
+
+.comments-wrapper .wrapper {
+	margin: 0;
 }

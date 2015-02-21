@@ -1,0 +1,19 @@
+ {% load static %}
+ {% for comment in comments %}
+<div class="wrapper">
+	<div class="comment-wrapper top">
+		{% if post.user.userinfo.image %} 
+			<img class="icon comment-user round inline" src="{% url 'image' post.user.id %}" alt="{{post.user.username}}"> 
+		{% else %} 
+			<img class="icon comment-user round inline" src="{% static 'socialnetwork/images/user.png' %}" alt="{{post.user.username}}"> 
+		{% endif %} 
+		<div class="comment-content">
+			<a class="comment-user link" href="{% url 'profile' post.user.id %}">{{post.user.username}} : </a>
+			<span>{{comment}}</span>
+		</div>
+	</div>
+	<div class="comment-wrapper bottom">
+		<span class="post-date">{{comment.creation_date}}</span>
+	</div>
+</div>
+{% endfor %}

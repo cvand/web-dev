@@ -16,6 +16,8 @@ urlpatterns = patterns('',
     
     url(r'^add-post$', 'socialnetwork.views.add_post', name='add'),
     url(r'^delete-post$', 'socialnetwork.views.delete_post', name='delete'),
+    url(r'^get-posts', 'socialnetwork.views.get_posts', name='get-posts'),
+    url(r'^add-comment$', 'socialnetwork.views.add_comment', name='comment'),
 
     url(r'^follow/(?P<user_id>\d+)$', 'socialnetwork.views.follow', name='follow'),
      url(r'^image/(?P<id>\d+)$', 'socialnetwork.views.get_photo', name='image'),

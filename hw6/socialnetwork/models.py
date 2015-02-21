@@ -5,11 +5,22 @@ from django.dispatch import receiver
 
 # User class for built-in authentication module
 from django.contrib.auth.models import User
+    
+class Comment(models.Model):
+    comment = models.TextField(max_length=160, blank=False)
+    creation_date = models.DateTimeField(default=datetime.now, editable=False)
+    
+    def __unicode__(self):
+        return self.comment
+    
+    class Meta:
+        get_latest_by = 'creation_date'
 
 class Post(models.Model):
     post_content = models.TextField(max_length=160)
     user = models.ForeignKey(User)
     creation_date = models.DateTimeField(default=datetime.now, editable=False)
+    comments = models.ManyToManyField(Comment, related_name="comments+")
     
     def __unicode__(self):
         return self.post_content
@@ -33,4 +44,3 @@ def image_post_delete_handler(sender, **kwargs):
 class Followers(models.Model):
     follower = models.ForeignKey(User)
     following = models.ForeignKey(UserInfo)
-    

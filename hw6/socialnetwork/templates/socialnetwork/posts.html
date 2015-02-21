@@ -1,47 +1,40 @@
 {% load static %}
 <div id="posts-wrapper" class="posts column">
+<input type="hidden" id="timestamp" value="{{ timestamp }}">
+	<div id="token">{% csrf_token %}</div>
 	<div id="posts-list" class="history">
 		{% if not posts %}
 		<div align="center">
 			<span>No posts</span>
 		</div>
-		{% endif %} 
-		{% for post in posts %}
-		<div class="wrapper">
-			<div class="post-wrapper top">
-				{% if post.user.userinfo.image %} 
-					<img class="icon post-user round inline" src="{% url 'image' post.user.id %}" alt="{{user.username}}">
-				{% else %} 
-					<img class="icon post-user round inline" src="{% static 'socialnetwork/images/user.png' %}" alt="{{user.username}}">
-				{% endif %}
-				<a class="post-user link" href="{% url 'profile' post.user.id %}">{{post.user.username}}</a>
-				{% if post.user == user %}
-				<form class="delete fright" action="{% url 'delete' %}" method="post">
-					<input type="hidden" name="post_id" value="{{ post.id }}">
-					<button class="empty" type="submit" name="submit" value=" "><img src="{% static 'socialnetwork/images/post_delete.png' %}"></button>
-					{% csrf_token %}
-				</form>
-				{% endif %}
-				<div class="post-content">
-					<span>{{post}}</span>
-				</div>
-			</div>
-			<div class="post-wrapper bottom">
-				{% if post.user != user %}
-					{% if post.user.userinfo in following %}
-						<a class="link following fleft" onclick="return toggleFollow(this);" href="{% url 'follow' post.user.id %}">Following</a>
-					{% else %}
-						<a class="link following fleft" onclick="return toggleFollow(this);" href="{% url 'follow' post.user.id %}">Follow Me!</a>
-					{% endif %}
-				{% endif %}
-				<span class="post-date">{{post.creation_date}}</span>
-			</div>
-		</div>
-		{% endfor %}
+		{% endif %}
+		{% include "socialnetwork/post_template.html" with posts=posts following=following user=user %}
 	</div>
 </div>
 
 <script>
+	$(function() {
+		window.setInterval(sendRequest, 20000);
+	});
+	
+	function sendRequest() {
+	    var time = $("#timestamp").val();
+	    var token = $("#token > input").val();
+	    var req = $.post( "get-posts", { timestamp: time, csrfmiddlewaretoken: token }, function( data ) {
+		    		$("#timestamp").val(data.timestamp);
+		    		handleResponse(data.html);
+		    	}, "json");
+	    return false;
+	}
+
+	function handleResponse(data) {
+		
+		var wrapper = $("#posts-list")
+		var firstPost = $(wrapper).first();
+		$(firstPost).before(data);
+		
+	}
+
 	function toggleFollow(element) {
 		var text = $(element).text();
 		var href = $(element).attr('href');

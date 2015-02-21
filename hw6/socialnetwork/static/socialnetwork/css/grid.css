@@ -11,6 +11,10 @@
 }
 
 .centered {
-  margin: auto;
-  width: -moz-fit-content;
+	margin: auto;
+	width: -moz-fit-content;
+}
+
+.info.column {
+	max-width: 350px;
 }
