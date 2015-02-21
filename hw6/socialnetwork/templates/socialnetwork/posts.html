@@ -30,8 +30,7 @@
 	function handleResponse(data) {
 		
 		var wrapper = $("#posts-list")
-		var firstPost = $(wrapper).first();
-		$(firstPost).before(data);
+		$(wrapper).prepend(data);
 		
 	}
 

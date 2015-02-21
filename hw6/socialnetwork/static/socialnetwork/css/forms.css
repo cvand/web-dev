@@ -171,7 +171,7 @@ label[for="image-clear_id"] {
 	display: inline-block;
 }
 
-#add-comment>textarea {
+.comment-form>textarea {
 	border-radius: 10px;
 	color: #464646;
 	font-size: 0.7em;

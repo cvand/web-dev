@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
     
 class Comment(models.Model):
     comment = models.TextField(max_length=160, blank=False)
+    user = models.ForeignKey(User)
     creation_date = models.DateTimeField(default=datetime.now, editable=False)
     
     def __unicode__(self):

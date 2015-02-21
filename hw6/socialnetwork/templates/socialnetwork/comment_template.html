@@ -2,13 +2,13 @@
  {% for comment in comments %}
 <div class="wrapper">
 	<div class="comment-wrapper top">
-		{% if post.user.userinfo.image %} 
-			<img class="icon comment-user round inline" src="{% url 'image' post.user.id %}" alt="{{post.user.username}}"> 
+		{% if comment.user.userinfo.image %} 
+			<img class="icon comment-user round inline" src="{% url 'image' comment.user.id %}" alt="{{comment.user.username}}"> 
 		{% else %} 
-			<img class="icon comment-user round inline" src="{% static 'socialnetwork/images/user.png' %}" alt="{{post.user.username}}"> 
+			<img class="icon comment-user round inline" src="{% static 'socialnetwork/images/user.png' %}" alt="{{comment.user.username}}"> 
 		{% endif %} 
 		<div class="comment-content">
-			<a class="comment-user link" href="{% url 'profile' post.user.id %}">{{post.user.username}} : </a>
+			<a class="comment-user link" href="{% url 'profile' comment.user.id %}">{{comment.user.username}} : </a>
 			<span>{{comment}}</span>
 		</div>
 	</div>

@@ -24,9 +24,6 @@ def home(request):
     now.strftime('YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]')
     
     posts = Post.objects.all().order_by('-creation_date')
-#     comments = {}
-#     for post in posts:
-#         comments[post.id] = post.comments.all()
     
     return render(request, 'socialnetwork/home.html', {'posts' : posts, 'form' : PostForm(), 'following' : following_users, 'user' : user, 'timestamp' : str(now)})
 
@@ -75,10 +72,6 @@ def profile(request, id):
 @transaction.atomic
 def add_post(request):
     context = {}
-    now = datetime.now()
-    now.strftime('YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]')
-    
-    context['timestamp'] = str(now)
 
     # Just display the registration form if this is a GET request.
     if request.method == 'GET':
@@ -117,11 +110,8 @@ def add_comment(request):
     if not post:
         return HttpResponse("Invalid request: you are trying to comment on a post that doen't exist")
 
-    new_comment = Comment()
-    new_comment.comment = comment
-    new_comment.save()
+    new_comment = Comment.objects.create(comment = comment, user=request.user)
     post.comments.add(new_comment)
-    post.save()
     
     context['comments'] = [new_comment]
     context['post'] = post
@@ -145,18 +135,21 @@ def get_posts(request):
         timestamp = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f')
         timestamp.strftime('YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]')
         
-        posts = Post.objects.filter(creation_date__gte=timestamp).order_by('-creation_date')
+        posts = Post.objects.filter(creation_date__gt=timestamp).order_by('-creation_date')
         response_text = posts
     
     context['posts'] = response_text
     context['user'] = request.user
+    now = datetime.now()
+    now.strftime('YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]')
+    
     following_users = get_followers(request.user)
     
     context['following'] = following_users
     
     response_html = render_to_string('socialnetwork/post_template.html', context)
     
-    response = json.dumps({'timestamp': str(timestamp),
+    response = json.dumps({'timestamp': str(now),
                'html': str(response_html)})
     return HttpResponse(response, content_type = 'text/json')
 
@@ -252,6 +245,7 @@ def stream(request):
     return render(request, 'socialnetwork/stream.html', {'posts' : posts, 'user' : user, 'following' : following_users, 'timestamp' : str(now)})
 
 @login_required
+@transaction.atomic
 def follow(request, user_id):
     context = {}
 

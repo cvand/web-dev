@@ -159,6 +159,7 @@ class CommentForm(forms.ModelForm):
         model = Comment
         exclude = (
             'creation_date',
+            'user',
         )
         widgets = {
           'comment': forms.Textarea(attrs={'rows':1, 'cols':80}),
